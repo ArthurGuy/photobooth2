@@ -228,6 +228,14 @@ def start_photobooth():
 	
 	print "Taking pics"
 	
+	font = pygame.font.Font(None, 100)
+    	text = font.render("Photo Booth", 1, (227, 157, 200))
+    	textpos = text.get_rect()
+    	textpos.centerx = background.get_rect().centerx
+    	textpos.centery = background.get_rect().centery
+   	screen.blit(text, textpos)
+	time.sleep(2)
+	
 	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 	
 
