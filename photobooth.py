@@ -224,7 +224,10 @@ def start_photobooth():
 	try: # take the photos
 		for i in range(1,total_pics+1):
 			camera.hflip = True # preview a mirror image
-			camera.start_preview() # start preview at low res but the right ratio
+			
+			# Turn on the camera preview overlay
+			camera.start_preview(fullscreen=False,window=(100, 100, 328, 246))
+			
 			time.sleep(2) #warm up camera
 			GPIO.output(led_pin,True) #turn on the LED
 			filename = config.file_path + now + '-0' + str(i) + '.jpg'
