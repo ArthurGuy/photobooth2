@@ -229,7 +229,7 @@ def start_photobooth():
 			GPIO.output(led_pin,True) #turn on the LED
 			filename = config.file_path + now + '-0' + str(i) + '.jpg'
 			camera.hflip = False # flip back when taking photo
-			camera.capture(filename, , resize=(high_res_w, high_res_h))
+			camera.capture(filename, resize=(high_res_w, high_res_h))
 			print(filename)
 			GPIO.output(led_pin,False) #turn off the LED
 			camera.stop_preview()
