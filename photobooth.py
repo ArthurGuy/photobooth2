@@ -210,7 +210,7 @@ def start_photobooth():
 	# clear the screen
 	clear_screen()
 	
-	camera = picamera.PiCamera(sensor_mode=2, resolution='3280x2464')
+	camera = picamera.PiCamera(sensor_mode=2)
 	camera.vflip = False
 	camera.hflip = True # flip for preview, showing users a mirror image
 	#camera.saturation = -100 # comment out this line if you want color images
@@ -247,13 +247,16 @@ def start_photobooth():
 			filename = config.file_path + now + '-0' + str(i) + '.jpg'
 			camera.hflip = False # flip back when taking photo
 			camera.resolution = (high_res_w, high_res_h)
-			camera.capture(filename, resize=(high_res_w, high_res_h))
+			camera.capture(filename)
+			#camera.capture(filename, resize=(high_res_w, high_res_h))
 			print(filename)
+			show_image(filename)
+			time.sleep(capture_delay)
 			
 			GPIO.output(led_pin,False) #turn off the LED
 			
-			show_image(real_path + "/pose" + str(i) + ".png")
-			time.sleep(capture_delay) # pause in-between shots
+			#show_image(real_path + "/pose" + str(i) + ".png")
+			#time.sleep(capture_delay) # pause in-between shots
 			clear_screen()
 			if i == total_pics+1:
 				break
