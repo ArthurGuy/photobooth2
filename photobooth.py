@@ -35,7 +35,6 @@ test_server = 'www.google.com'
 high_res_w = 3280 # width of high res image, if taken
 high_res_h = 2464 # height of high res image, if taken
 
-capture_count_pics = True # if true, show a photo count between taking photos. If false, do not. False is faster.
 make_gifs = True    # True to make an animated gif. False to post 4 jpgs into one post.
 hi_res_pics = True  # True to save high res pics from camera.
                     # If also uploading, the program will also convert each image to a smaller image before making the gif.
@@ -211,12 +210,9 @@ def start_photobooth():
 	pixel_width = 0 # local variable declaration
 	pixel_height = 0 # local variable declaration
 	
-	if hi_res_pics:
-		camera.resolution = (high_res_w, high_res_h) # set camera resolution to high res
-	else:
-		pixel_width = 500 # maximum width of animated gif on tumblr
-		pixel_height = config.monitor_h * pixel_width // config.monitor_w
-		camera.resolution = (pixel_width, pixel_height) # set camera resolution to low res
+	pixel_width = config.monitor_w
+	pixel_height = config.monitor_h * pixel_width // config.monitor_w
+	camera.resolution = (pixel_width, pixel_height) # set camera resolution to low res
 		
 	################################# Begin Step 2 #################################
 	
@@ -224,27 +220,28 @@ def start_photobooth():
 	
 	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 	
-	if capture_count_pics:
-		try: # take the photos
-			for i in range(1,total_pics+1):
-				camera.hflip = True # preview a mirror image
-				camera.start_preview() # start preview at low res but the right ratio
-				time.sleep(2) #warm up camera
-				GPIO.output(led_pin,True) #turn on the LED
-				filename = config.file_path + now + '-0' + str(i) + '.jpg'
-				camera.hflip = False # flip back when taking photo
-				camera.capture(filename)
-				print(filename)
-				GPIO.output(led_pin,False) #turn off the LED
-				camera.stop_preview()
-				show_image(real_path + "/pose" + str(i) + ".png")
-				time.sleep(capture_delay) # pause in-between shots
-				clear_screen()
-				if i == total_pics+1:
-					break
-		finally:
-			camera.close()
-	else:
+
+	try: # take the photos
+		for i in range(1,total_pics+1):
+			camera.hflip = True # preview a mirror image
+			camera.start_preview() # start preview at low res but the right ratio
+			time.sleep(2) #warm up camera
+			GPIO.output(led_pin,True) #turn on the LED
+			filename = config.file_path + now + '-0' + str(i) + '.jpg'
+			camera.hflip = False # flip back when taking photo
+			camera.capture(filename, , resize=(high_res_w, high_res_h))
+			print(filename)
+			GPIO.output(led_pin,False) #turn off the LED
+			camera.stop_preview()
+			show_image(real_path + "/pose" + str(i) + ".png")
+			time.sleep(capture_delay) # pause in-between shots
+			clear_screen()
+			if i == total_pics+1:
+				break
+	finally:
+		camera.close()
+		
+	if False: #Old method
 		camera.start_preview() # start preview at low res but the right ratio
 		time.sleep(2) #warm up camera
 		
