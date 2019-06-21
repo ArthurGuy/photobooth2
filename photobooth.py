@@ -32,6 +32,10 @@ test_server = 'www.google.com'
 monitor_w = 1920    # width of the display monitor
 monitor_h = 1080    # height of the display monitor
 
+# The live preview image shown to users
+preview_image_w = 656
+preview_image_h = 492
+
 # full frame of v1 camera is 3280x2464. Wide screen max is 2592,1555
 # if you run into resource issues, try smaller, like 1920x1152. 
 # or increase memory http://picamera.readthedocs.io/en/release-1.12/fov.html#hardware-limits
@@ -213,8 +217,6 @@ def start_photobooth():
 	pixel_width = 0 # local variable declaration
 	pixel_height = 0 # local variable declaration
 	
-	preview_image_w = 328
-	preview_image_h = 246
 	preview_window_x = (monitor_w - preview_image_w) / 2
 	preview_window_y = (monitor_h - preview_image_h) / 2
 	
