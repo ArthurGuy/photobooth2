@@ -29,6 +29,9 @@ gif_delay = 50 # How much time between frames in the animated gif
 restart_delay = 5 # how long to display finished message before beginning a new session
 test_server = 'www.google.com'
 
+monitor_w = 1920    # width of the display monitor
+monitor_h = 1080    # height of the display monitor
+
 # full frame of v1 camera is 3280x2464. Wide screen max is 2592,1555
 # if you run into resource issues, try smaller, like 1920x1152. 
 # or increase memory http://picamera.readthedocs.io/en/release-1.12/fov.html#hardware-limits
@@ -46,8 +49,8 @@ camera_iso = 800    # adjust for lighting issues. Normal is 100 or 200. Sort of 
 ### Variables that Change ###
 #############################
 # Do not change these variables, as the code will change it anyway
-transform_x = config.monitor_w # how wide to scale the jpg when replaying
-transfrom_y = config.monitor_h # how high to scale the jpg when replaying
+transform_x = monitor_w # how wide to scale the jpg when replaying
+transfrom_y = monitor_h # how high to scale the jpg when replaying
 offset_x = 0 # how far off to left corner to display photos
 offset_y = 0 # how far off to left corner to display photos
 replay_delay = 1 # how much to wait in-between showing pics on-screen after taking
@@ -66,7 +69,7 @@ GPIO.output(led_pin,False) #for some reason the pin turns on at the beginning of
 
 # initialize pygame
 pygame.init()
-pygame.display.set_mode((config.monitor_w, config.monitor_h))
+pygame.display.set_mode((monitor_w, monitor_h))
 screen = pygame.display.get_surface()
 pygame.display.set_caption('Photo Booth Pics')
 pygame.mouse.set_visible(False) #hide the mouse cursor
@@ -125,27 +128,27 @@ def set_demensions(img_w, img_h):
     global transform_y, transform_x, offset_y, offset_x
 
     # based on output screen resolution, calculate how to display
-    ratio_h = (config.monitor_w * img_h) / img_w 
+    ratio_h = (monitor_w * img_h) / img_w 
 
-    if (ratio_h < config.monitor_h):
+    if (ratio_h < monitor_h):
         #Use horizontal black bars
         #print "horizontal black bars"
         transform_y = ratio_h
-        transform_x = config.monitor_w
-        offset_y = (config.monitor_h - ratio_h) / 2
+        transform_x = monitor_w
+        offset_y = (monitor_h - ratio_h) / 2
         offset_x = 0
-    elif (ratio_h > config.monitor_h):
+    elif (ratio_h > monitor_h):
         #Use vertical black bars
         #print "vertical black bars"
-        transform_x = (config.monitor_h * img_w) / img_h
-        transform_y = config.monitor_h
-        offset_x = (config.monitor_w - transform_x) / 2
+        transform_x = (monitor_h * img_w) / img_h
+        transform_y = monitor_h
+        offset_x = (monitor_w - transform_x) / 2
         offset_y = 0
     else:
         #No need for black bars as photo ratio equals screen ratio
         #print "no black bars"
-        transform_x = config.monitor_w
-        transform_y = config.monitor_h
+        transform_x = monitor_w
+        transform_y = monitor_h
         offset_y = offset_x = 0
 
     # uncomment these lines to troubleshoot screen ratios
@@ -212,11 +215,11 @@ def start_photobooth():
 	
 	preview_image_w = 328
 	preview_image_h = 246
-	preview_window_x = (config.monitor_w - preview_image_w) / 2
-	preview_window_y = (config.monitor_h - preview_image_h) / 2
+	preview_window_x = (monitor_w - preview_image_w) / 2
+	preview_window_y = (monitor_h - preview_image_h) / 2
 	
-	pixel_width = config.monitor_w
-	pixel_height = config.monitor_h * pixel_width // config.monitor_w
+	pixel_width = monitor_w
+	pixel_height = monitor_h * pixel_width // monitor_w
 	camera.resolution = (pixel_width, pixel_height) # set camera resolution to low res
 		
 	################################# Begin Step 2 #################################
