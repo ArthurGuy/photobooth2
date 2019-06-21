@@ -39,8 +39,8 @@ preview_image_h = 400
 # full frame of v1 camera is 3280x2464. Wide screen max is 2592,1555
 # if you run into resource issues, try smaller, like 1920x1152. 
 # or increase memory http://picamera.readthedocs.io/en/release-1.12/fov.html#hardware-limits
-high_res_w = 3280 # width of high res image, if taken
-high_res_h = 2464 # height of high res image, if taken
+high_res_w = 3210 # width of high res image, if taken
+high_res_h = 2140 # height of high res image, if taken
 
 make_gifs = True    # True to make an animated gif. False to post 4 jpgs into one post.
 hi_res_pics = True  # True to save high res pics from camera.
@@ -287,9 +287,9 @@ def start_photobooth():
 	
 	if make_gifs: # make the gifs
 		if hi_res_pics:
-			# first make a small version of each image. Tumblr's max animated gif's are 500 pixels wide.
+			# first make a smaller version of each image
 			for x in range(1, total_pics+1): #batch process all the images
-				graphicsmagick = "gm convert -size 500x500 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
+				graphicsmagick = "gm convert -size 1020x680 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 1020x680 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
 				os.system(graphicsmagick) #do the graphicsmagick action
 
 			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*-sm.jpg " + config.file_path + now + ".gif" 
