@@ -33,8 +33,8 @@ monitor_w = 1920    # width of the display monitor
 monitor_h = 1080    # height of the display monitor
 
 # The live preview image shown to users
-preview_image_w = 656
-preview_image_h = 492
+preview_image_w = 600
+preview_image_h = 400
 
 # full frame of v1 camera is 3280x2464. Wide screen max is 2592,1555
 # if you run into resource issues, try smaller, like 1920x1152. 
