@@ -22,19 +22,27 @@ from signal import alarm, signal, SIGALRM, SIGKILL
 led_pin = 7 # LED 
 btn_pin = 18 # pin for the start button
 
-total_pics = 4 # number of pics to be taken
-capture_delay = 1 # delay between pics
+total_pics = 3 # number of pics to be taken
+capture_delay = 2 # delay between pics
 prep_delay = 5 # number of seconds at step 1 as users prep to have photo taken
-gif_delay = 100 # How much time between frames in the animated gif
-restart_delay = 10 # how long to display finished message before beginning a new session
+gif_delay = 50 # How much time between frames in the animated gif
+restart_delay = 8 # how long to display finished message before beginning a new session
 test_server = 'www.google.com'
 
-# full frame of v1 camera is 2592x1944. Wide screen max is 2592,1555
+# full frame of v1 camera is 3280x2464. Wide screen max is 2592,1555
 # if you run into resource issues, try smaller, like 1920x1152. 
 # or increase memory http://picamera.readthedocs.io/en/release-1.12/fov.html#hardware-limits
-high_res_w = 1296 # width of high res image, if taken
-high_res_h = 972 # height of high res image, if taken
+high_res_w = 3280 # width of high res image, if taken
+high_res_h = 2464 # height of high res image, if taken
 
+capture_count_pics = True # if true, show a photo count between taking photos. If false, do not. False is faster.
+make_gifs = True   # True to make an animated gif. False to post 4 jpgs into one post.
+hi_res_pics = False  # True to save high res pics from camera.
+                    # If also uploading, the program will also convert each image to a smaller image before making the gif.
+                    # False to first capture low res pics. False is faster.
+camera_iso = 800    # adjust for lighting issues. Normal is 100 or 200. Sort of dark is 400. Dark is 800 max.
+                    # available options: 100, 200, 320, 400, 500, 640, 800
+	
 #############################
 ### Variables that Change ###
 #############################
@@ -197,13 +205,13 @@ def start_photobooth():
 	camera = picamera.PiCamera()  
 	camera.vflip = False
 	camera.hflip = True # flip for preview, showing users a mirror image
-	camera.saturation = -100 # comment out this line if you want color images
-	camera.iso = config.camera_iso
+	#camera.saturation = -100 # comment out this line if you want color images
+	camera.iso = camera_iso
 	
 	pixel_width = 0 # local variable declaration
 	pixel_height = 0 # local variable declaration
 	
-	if config.hi_res_pics:
+	if hi_res_pics:
 		camera.resolution = (high_res_w, high_res_h) # set camera resolution to high res
 	else:
 		pixel_width = 500 # maximum width of animated gif on tumblr
@@ -216,7 +224,7 @@ def start_photobooth():
 	
 	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 	
-	if config.capture_count_pics:
+	if capture_count_pics:
 		try: # take the photos
 			for i in range(1,total_pics+1):
 				camera.hflip = True # preview a mirror image
@@ -263,8 +271,8 @@ def start_photobooth():
 	else:
 		show_image(real_path + "/processing.png")
 	
-	if config.make_gifs: # make the gifs
-		if config.hi_res_pics:
+	if make_gifs: # make the gifs
+		if hi_res_pics:
 			# first make a small version of each image. Tumblr's max animated gif's are 500 pixels wide.
 			for x in range(1, total_pics+1): #batch process all the images
 				graphicsmagick = "gm convert -size 500x500 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 500x500 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
@@ -284,7 +292,7 @@ def start_photobooth():
 			print "bad internet connection"
                     
 		while connected:
-			if config.make_gifs: 
+			if make_gifs: 
 				try:
 					file_to_upload = config.file_path + now + ".gif"
 					#client.create_photo(config.tumblr_blog, state="published", tags=[config.tagsForTumblr], data=file_to_upload)
