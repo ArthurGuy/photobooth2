@@ -24,7 +24,7 @@ btn_pin = 18 # pin for the start button
 
 total_pics = 3 # number of pics to be taken
 capture_delay = 3 # delay between pics
-prep_delay = 5 # number of seconds at step 1 as users prep to have photo taken
+prep_delay = 3 # number of seconds before step 1, after button press before countdown
 gif_delay = 50 # How much time between frames in the animated gif
 restart_delay = 5 # how long to display finished message before beginning a new session
 test_server = 'www.google.com'
