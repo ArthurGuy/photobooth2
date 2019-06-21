@@ -236,7 +236,8 @@ def start_photobooth():
 			camera.hflip = True # preview a mirror image
 			
 			# Turn on the camera preview overlay
-			camera.resolution = (preview_image_w, preview_image_h)
+			#camera.resolution = (preview_image_w, preview_image_h)
+			camera.resolution = (high_res_w, high_res_h)
 			camera.start_preview(fullscreen=False,window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
 			
 			time.sleep(2) #warm up camera
