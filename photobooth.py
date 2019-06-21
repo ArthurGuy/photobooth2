@@ -231,8 +231,8 @@ def start_photobooth():
 	font = pygame.font.Font(None, 100)
     	text = font.render("Photo Booth", 1, (227, 157, 200))
     	textpos = text.get_rect()
-    	textpos.centerx = background.get_rect().centerx
-    	textpos.centery = background.get_rect().centery
+    	textpos.centerx = screen.get_rect().centerx
+    	textpos.centery = screen.get_rect().centery
    	screen.blit(text, textpos)
 	time.sleep(2)
 	
