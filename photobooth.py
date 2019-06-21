@@ -338,7 +338,7 @@ def start_photobooth():
 
 def wait_for_start():
 	global pygame
-	while NotEvent:
+	while True:
 	    input_state = GPIO.input(btn_pin)
 	    if input_state == False:		
 		    return
