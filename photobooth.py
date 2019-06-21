@@ -194,7 +194,16 @@ def display_pics(jpg_group):
 		for i in range(1, total_pics+1): #show each pic
 			show_image(config.file_path + jpg_group + "-0" + str(i) + ".jpg")
 			time.sleep(replay_delay) # pause 
-				
+
+def display_header_text(text):
+	font = pygame.font.Font(None, 100)
+	text = font.render(text, 1, (127, 127, 127))
+	textpos = text.get_rect()
+	textpos.centerx = screen.get_rect().centerx
+	textpos.centery = 60
+	screen.blit(text, textpos)
+	pygame.display.flip()
+
 # define the photo taking function for when the big button is pressed 
 def start_photobooth(): 
 
@@ -228,14 +237,6 @@ def start_photobooth():
 	
 	print "Taking pics"
 	
-	font = pygame.font.Font(None, 100)
-    	text = font.render("Photo Booth", 1, (227, 157, 200))
-    	textpos = text.get_rect()
-    	textpos.centerx = screen.get_rect().centerx
-    	textpos.centery = screen.get_rect().centery
-   	screen.blit(text, textpos)
-	time.sleep(2)
-	
 	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 	
 
@@ -243,11 +244,18 @@ def start_photobooth():
 		for i in range(1,total_pics+1):
 			camera.hflip = True # preview a mirror image
 			
+			display_header_text("Picture in 3...")
+			
 			# Turn on the camera preview overlay
 			camera.resolution = (preview_image_w, preview_image_h)
 			camera.start_preview(fullscreen=False,window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
 			
-			time.sleep(2) #warm up camera
+			time.sleep(1) #warm up camera
+			display_header_text("Picture in 3...2...")
+			time.sleep(1)
+			display_header_text("Picture in 3...2...1...")
+			time.sleep(1)
+			
 			GPIO.output(led_pin,True) #turn on the LED
 			
 			camera.stop_preview()
