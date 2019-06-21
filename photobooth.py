@@ -42,7 +42,7 @@ preview_image_h = 600
 # if you run into resource issues, try smaller, like 1920x1152. 
 # or increase memory http://picamera.readthedocs.io/en/release-1.12/fov.html#hardware-limits
 high_res_w = 3280 # width of high res image, if taken
-high_res_h = 2460 # height of high res image, if taken
+high_res_h = 2464 # height of high res image, if taken
 
 make_gifs = True    # True to make an animated gif. False to post 4 jpgs into one post.
 hi_res_pics = True  # True to save high res pics from camera.
@@ -210,7 +210,7 @@ def start_photobooth():
 	# clear the screen
 	clear_screen()
 	
-	camera = picamera.PiCamera(sensor_mode=2)
+	camera = picamera.PiCamera(sensor_mode=2, resolution='3280x2464')
 	camera.vflip = False
 	camera.hflip = True # flip for preview, showing users a mirror image
 	#camera.saturation = -100 # comment out this line if you want color images
