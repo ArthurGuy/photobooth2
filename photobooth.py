@@ -222,9 +222,7 @@ def start_photobooth():
 	preview_window_x = (monitor_w - preview_image_w) / 2
 	preview_window_y = (monitor_h - preview_image_h) / 2
 	
-	#pixel_width = monitor_w
-	#pixel_height = monitor_h * pixel_width // monitor_w
-	camera.resolution = (preview_image_w, preview_image_h) # set camera resolution to low res
+	
 		
 	################################# Begin Step 2 #################################
 	
@@ -238,19 +236,21 @@ def start_photobooth():
 			camera.hflip = True # preview a mirror image
 			
 			# Turn on the camera preview overlay
+			camera.resolution = (preview_image_w, preview_image_h)
 			camera.start_preview(fullscreen=False,window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
 			
 			time.sleep(2) #warm up camera
 			GPIO.output(led_pin,True) #turn on the LED
 			
+			camera.stop_preview()
+			
 			filename = config.file_path + now + '-0' + str(i) + '.jpg'
 			camera.hflip = False # flip back when taking photo
+			camera.resolution = (high_res_w, high_res_h)
 			camera.capture(filename, resize=(high_res_w, high_res_h))
 			print(filename)
 			
 			GPIO.output(led_pin,False) #turn off the LED
-			
-			camera.stop_preview()
 			
 			show_image(real_path + "/pose" + str(i) + ".png")
 			time.sleep(capture_delay) # pause in-between shots
