@@ -210,7 +210,7 @@ def start_photobooth():
 	# clear the screen
 	clear_screen()
 	
-	camera = picamera.PiCamera()  
+	camera = picamera.PiCamera(sensor_mode=2)
 	camera.vflip = False
 	camera.hflip = True # flip for preview, showing users a mirror image
 	#camera.saturation = -100 # comment out this line if you want color images
