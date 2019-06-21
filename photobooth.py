@@ -216,15 +216,15 @@ def start_photobooth():
 	#camera.saturation = -100 # comment out this line if you want color images
 	camera.iso = camera_iso
 	
-	pixel_width = 0 # local variable declaration
-	pixel_height = 0 # local variable declaration
+	#pixel_width = 0 # local variable declaration
+	#pixel_height = 0 # local variable declaration
 	
 	preview_window_x = (monitor_w - preview_image_w) / 2
 	preview_window_y = (monitor_h - preview_image_h) / 2
 	
-	pixel_width = monitor_w
-	pixel_height = monitor_h * pixel_width // monitor_w
-	camera.resolution = (pixel_width, pixel_height) # set camera resolution to low res
+	#pixel_width = monitor_w
+	#pixel_height = monitor_h * pixel_width // monitor_w
+	camera.resolution = (high_res_w, high_res_h) # set camera resolution to low res
 		
 	################################# Begin Step 2 #################################
 	
