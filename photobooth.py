@@ -13,7 +13,6 @@ import atexit
 import sys
 import socket
 import pygame
-from pygame.locals import QUIT, KEYDOWN, K_ESCAPE
 import config # this is the config python file config.py
 from signal import alarm, signal, SIGALRM, SIGKILL
 
@@ -80,8 +79,8 @@ atexit.register(cleanup)
 # A function to handle keyboard/mouse/device input events    
 def input(events):
     for event in events:  # Hit the ESC key to quit the slideshow.
-        if (event.type == QUIT or
-            (event.type == KEYDOWN and event.key == K_ESCAPE)):
+        if (event.type == pygame.QUIT or
+            (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)):
             pygame.quit()
                 
 #delete files in folder
@@ -337,6 +336,20 @@ def start_photobooth():
 	show_image(real_path + "/intro.png");
 	GPIO.output(led_pin,True) #turn on the LED
 
+def wait_for_start():
+	global pygame
+	while NotEvent:
+	    input_state = GPIO.input(btn_pin)
+	    if input_state == False:		
+		    return
+	    for event in pygame.event.get():			
+		    if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_ESCAPE:
+			    pygame.quit()
+			if event.key == pygame.K_DOWN:
+			    return
+	    time.sleep(0.2)
+	
 ####################
 ### Main Program ###
 ####################
@@ -357,6 +370,9 @@ show_image(real_path + "/intro.png");
 while True:
 	GPIO.output(led_pin,True); #turn on the light showing users they can push the button
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
-	GPIO.wait_for_edge(btn_pin, GPIO.FALLING)
-	time.sleep(config.debounce) #debounce
+	
+	wait_for_start()
+	
+	#GPIO.wait_for_edge(btn_pin, GPIO.FALLING)
+	#time.sleep(config.debounce) #debounce
 	start_photobooth()
