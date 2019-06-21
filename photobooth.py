@@ -14,7 +14,6 @@ import sys
 import socket
 import pygame
 from pygame.locals import QUIT, KEYDOWN, K_ESCAPE
-import pytumblr # https://github.com/tumblr/pytumblr
 import config # this is the config python file config.py
 from signal import alarm, signal, SIGALRM, SIGKILL
 
@@ -52,14 +51,6 @@ replay_cycles = 2 # how many times to show each photo on-screen after taking
 ### Other Config ###
 ####################
 real_path = os.path.dirname(os.path.realpath(__file__))
-
-# Setup the tumblr OAuth Client
-client = pytumblr.TumblrRestClient(
-    config.consumer_key,
-    config.consumer_secret,
-    config.oath_token,
-    config.oath_secret,
-)
 
 # GPIO setup
 GPIO.setmode(GPIO.BOARD)
@@ -230,7 +221,7 @@ def start_photobooth():
 		try: # take the photos
 			for i in range(1,total_pics+1):
 				camera.hflip = True # preview a mirror image
-				camera.start_preview(resolution=(config.monitor_w, config.monitor_h)) # start preview at low res but the right ratio
+				camera.start_preview() # start preview at low res but the right ratio
 				time.sleep(2) #warm up camera
 				GPIO.output(led_pin,True) #turn on the LED
 				filename = config.file_path + now + '-0' + str(i) + '.jpg'
@@ -247,7 +238,7 @@ def start_photobooth():
 		finally:
 			camera.close()
 	else:
-		camera.start_preview(resolution=(config.monitor_w, config.monitor_h)) # start preview at low res but the right ratio
+		camera.start_preview() # start preview at low res but the right ratio
 		time.sleep(2) #warm up camera
 		
 		try: #take the photos
@@ -297,7 +288,7 @@ def start_photobooth():
 			if config.make_gifs: 
 				try:
 					file_to_upload = config.file_path + now + ".gif"
-					client.create_photo(config.tumblr_blog, state="published", tags=[config.tagsForTumblr], data=file_to_upload)
+					#client.create_photo(config.tumblr_blog, state="published", tags=[config.tagsForTumblr], data=file_to_upload)
 					break
 				except ValueError:
 					print "Oops. No internect connection. Upload later."
@@ -313,7 +304,7 @@ def start_photobooth():
 					myJpgs=[0 for i in range(4)]
 					for i in range(4):
 						myJpgs[i]=config.file_path + now + "-0" + str(i+1) + ".jpg"
-					client.create_photo(config.tumblr_blog, state="published", tags=[config.tagsForTumblr], format="markdown", data=myJpgs)
+					#client.create_photo(config.tumblr_blog, state="published", tags=[config.tagsForTumblr], format="markdown", data=myJpgs)
 					break
 				except ValueError:
 					print "Oops. No internect connection. Upload later."
