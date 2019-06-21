@@ -236,8 +236,7 @@ def start_photobooth():
 			camera.hflip = True # preview a mirror image
 			
 			# Turn on the camera preview overlay
-			#camera.resolution = (preview_image_w, preview_image_h)
-			camera.resolution = (high_res_w, high_res_h)
+			camera.resolution = (preview_image_w, preview_image_h)
 			camera.start_preview(fullscreen=False,window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
 			
 			time.sleep(2) #warm up camera
@@ -251,13 +250,13 @@ def start_photobooth():
 			camera.capture(filename)
 			#camera.capture(filename, resize=(high_res_w, high_res_h))
 			print(filename)
-			show_image(filename)
-			time.sleep(capture_delay)
 			
 			GPIO.output(led_pin,False) #turn off the LED
 			
 			#show_image(real_path + "/pose" + str(i) + ".png")
-			#time.sleep(capture_delay) # pause in-between shots
+			show_image(filename)
+			time.sleep(capture_delay) # pause in-between shots
+			
 			clear_screen()
 			if i == total_pics+1:
 				break
@@ -355,12 +354,12 @@ def start_photobooth():
 		
 	print "Done"
 	
-	if config.post_online:
-		show_image(real_path + "/finished.png")
-	else:
-		show_image(real_path + "/finished2.png")
+	#if config.post_online:
+	#	show_image(real_path + "/finished.png")
+	#else:
+	#	show_image(real_path + "/finished2.png")
 	
-	time.sleep(restart_delay)
+	#time.sleep(restart_delay)
 	show_image(real_path + "/intro.png");
 	GPIO.output(led_pin,True) #turn on the LED
 
