@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-# created by chris@drumminhands.com
-# see instructions at http://www.drumminhands.com/2014/06/15/raspberry-pi-photo-booth/
 
 import os
 import glob
@@ -27,7 +25,6 @@ capture_delay = 3 # delay between pics
 prep_delay = 3 # number of seconds before step 1, after button press before countdown
 gif_delay = 25 # How much time between frames in the animated gif
 restart_delay = 5 # how long to display finished message before beginning a new session
-test_server = 'www.google.com'
 
 monitor_w = 1920    # width of the display monitor
 monitor_h = 1080    # height of the display monitor
@@ -99,31 +96,7 @@ def input(events):
             (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)):
             pygame.quit()
                 
-#delete files in folder
-def clear_pics(channel):
-	files = glob.glob(config.file_path + '*')
-	for f in files:
-		os.remove(f) 
-	#light the lights in series to show completed
-	print "Deleted previous pics"
-	for x in range(0, 3): #blink light
-		GPIO.output(led_pin,True); 
-		sleep(0.25)
-		GPIO.output(led_pin,False);
-		sleep(0.25)
-
-# check if connected to the internet   
-def is_connected():
-  try: 
-    # see if we can resolve the host name -- tells us if there is a DNS listening  
-    host = socket.gethostbyname(test_server)
-    # connect to the host -- tells us if the host is actually
-    # reachable
-    s = socket.create_connection((host, 80), 2)
-    return True
-  except:
-     pass
-  return False    
+   
 
 # set variables to properly display the image on screen at right ratio
 def set_demensions(img_w, img_h):
@@ -295,22 +268,7 @@ def start_photobooth():
 			clear_screen()
 	finally:
 		camera.close()
-		
-	if False: #Old method
-		camera.start_preview() # start preview at low res but the right ratio
-		time.sleep(2) #warm up camera
-		
-		try: #take the photos
-			for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.jpg')):
-				GPIO.output(led_pin,True) #turn on the LED
-				print(filename)
-				time.sleep(capture_delay) # pause in-between shots
-				GPIO.output(led_pin,False) #turn off the LED
-				if i == total_pics-1:
-					break
-		finally:
-			camera.stop_preview()
-			camera.close()
+
 		
 	########################### Begin Step 3 #################################
 	
@@ -318,10 +276,7 @@ def start_photobooth():
 	
 	print "Creating an animated gif" 
 	
-	if config.post_online:
-		show_image(real_path + "/uploading.png")
-	else:
-		show_image(real_path + "/processing.png")
+	show_image(real_path + "/processing.png")
 	
 	if make_gifs: # make the gifs
 		if hi_res_pics:
@@ -337,42 +292,6 @@ def start_photobooth():
 			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*.jpg " + config.file_path + now + ".gif" 
 			os.system(graphicsmagick) #make the .gif
 
-	if config.post_online: # turn off posting pics online in config.py
-		connected = is_connected() #check to see if you have an internet connection
-
-		if (connected==False):
-			print "bad internet connection"
-                    
-		while connected:
-			if make_gifs: 
-				try:
-					file_to_upload = config.file_path + now + ".gif"
-					#client.create_photo(config.tumblr_blog, state="published", tags=[config.tagsForTumblr], data=file_to_upload)
-					break
-				except ValueError:
-					print "Oops. No internect connection. Upload later."
-					try: #make a text file as a note to upload the .gif later
-						file = open(config.file_path + now + "-FILENOTUPLOADED.txt",'w')   # Trying to create a new file or open one
-						file.close()
-					except:
-						print('Something went wrong. Could not write file.')
-						sys.exit(0) # quit Python
-			else: # upload jpgs instead
-				try:
-					# create an array and populate with file paths to our jpgs
-					myJpgs=[0 for i in range(4)]
-					for i in range(4):
-						myJpgs[i]=config.file_path + now + "-0" + str(i+1) + ".jpg"
-					#client.create_photo(config.tumblr_blog, state="published", tags=[config.tagsForTumblr], format="markdown", data=myJpgs)
-					break
-				except ValueError:
-					print "Oops. No internect connection. Upload later."
-					try: #make a text file as a note to upload the .gif later
-						file = open(config.file_path + now + "-FILENOTUPLOADED.txt",'w')   # Trying to create a new file or open one
-						file.close()
-					except:
-						print('Something went wrong. Could not write file.')
-						sys.exit(0) # quit Python				
 	
 	########################### Begin Step 4 #################################
 	
@@ -414,9 +333,6 @@ def wait_for_start():
 ### Main Program ###
 ####################
 
-## clear the previously stored pics based on config settings
-if config.clear_on_startup:
-	clear_pics(1)
 
 print "Photo booth app running..." 
 for x in range(0, 5): #blink light to show the app is running
