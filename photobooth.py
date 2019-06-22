@@ -78,6 +78,9 @@ pygame.display.set_caption('Photo Booth Pics')
 pygame.mouse.set_visible(False) #hide the mouse cursor
 pygame.display.toggle_fullscreen()
 
+# Load the background template
+bgimage = PIL.Image.open(templatePath)
+
 #################
 ### Functions ###
 #################
@@ -169,7 +172,19 @@ def display_pics(jpg_group):
 
 def combine_pics(jpg_group):
 	for i in range(1, total_pics+1):
-		config.file_path + jpg_group + "-0" + str(i) + ".jpg"
+		image = PIL.Image.open(config.file_path + jpg_group + "-0" + str(i) + ".jpg")
+		if i == 1:
+        		bgimage.paste(image, (625, 30))
+		if i == 2:
+        		bgimage.paste(image, (625, 410))
+		if i == 3:
+        		bgimage.paste(image, (55, 30))
+		if i == 4:
+        		bgimage.paste(image, (55, 410))
+
+	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
+        filename = config.file_path + now + '-combined' + str(i) + '.jpg'
+        bgimage.save(filename)
 
 def display_header_text(text):
 	font = pygame.font.Font(None, 100)
@@ -276,6 +291,8 @@ def start_photobooth():
 	########################### Begin Step 3 #################################
 	
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
+	
+	combine_pics(now)
 	
 	print "Creating an animated gif" 
 	
