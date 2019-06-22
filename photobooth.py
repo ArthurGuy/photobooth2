@@ -177,13 +177,13 @@ def combine_pics(jpg_group):
 		for i in range(1, total_pics+1):
 			image = PIL.Image.open(config.file_path + jpg_group + "-0" + str(i) + "-sm.jpg")
 			if i == 1:
-				bgimage.paste(image, (625, 10))
+				bgimage.paste(image, (25, 25))
 			if i == 2:
-				bgimage.paste(image, (625, 410))
+				bgimage.paste(image, (675, 25))
 			if i == 3:
-				bgimage.paste(image, (10, 10))
+				bgimage.paste(image, (675, 525))
 			if i == 4:
-				bgimage.paste(image, (10, 410))
+				bgimage.paste(image, (25, 525))
 
 		now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 		filename = config.file_path + now + '-combined' + str(i) + '.jpg'
