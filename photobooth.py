@@ -347,9 +347,7 @@ def wait_for_start():
 	global pygame
 	while True:
 		channel = GPIO.wait_for_edge(btn_pin, GPIO.FALLING, timeout=500)
-		if channel is None:
-			#No event, continue to check for escape key
-		else:
+		if channel is not None:
 			# Button press
 			return
 	    	#input_state = GPIO.input(btn_pin)
