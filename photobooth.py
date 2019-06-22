@@ -249,7 +249,7 @@ def start_photobooth():
 		for i in range(1,total_pics+1):
 			camera.hflip = True # preview a mirror image
 			
-			display_header_text("Get ready")
+			#display_header_text("Get ready")
 			
 			# Turn on the camera preview overlay
 			camera.resolution = (preview_image_w, preview_image_h)
@@ -265,12 +265,18 @@ def start_photobooth():
 			
 			camera.stop_preview()
 			
+			screen.fill(pygame.Color("white"))
+			pygame.display.flip()
+			
 			filename = config.file_path + now + '-0' + str(i) + '.jpg'
 			camera.hflip = False # flip back when taking photo
 			camera.resolution = (high_res_w, high_res_h)
 			camera.capture(filename)
 			#camera.capture(filename, resize=(high_res_w, high_res_h))
 			print(filename)
+			
+			screen.fill(pygame.Color("black"))
+			pygame.display.flip()
 			
 			GPIO.output(led_pin,False) #turn off the LED
 			
