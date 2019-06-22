@@ -286,17 +286,15 @@ def start_photobooth():
 			
 			clear_screen()
 			
-			if i == total_pics+1:
-				break
-			
-			show_image(filename)
-			display_header_text("You look great!")
-			time.sleep(2)
-			clear_screen()
-			
-			display_header_text("Get ready for the next one!")
-			time.sleep(2)
-			clear_screen()
+			if i < total_pics+1:
+				show_image(filename)
+				display_header_text("You look great!")
+				time.sleep(2)
+				clear_screen()
+
+				display_header_text("Get ready for the next one!")
+				#time.sleep(2)
+				#clear_screen()
 	finally:
 		camera.close()
 
