@@ -22,10 +22,10 @@ led_pin = 7 # LED
 btn_pin = 18 # pin for the start button
 
 total_pics = 3 # number of pics to be taken
+countdown_seconds = 4
 capture_delay = 3 # delay between pics
 prep_delay = 3 # number of seconds before step 1, after button press before countdown
 gif_delay = 20 # How much time between frames in the animated gif
-restart_delay = 5 # how long to display finished message before beginning a new session
 time_to_display_final_image = 5 # How long should the final combined image display for
 
 monitor_w = 1920    # width of the display monitor
@@ -177,13 +177,13 @@ def combine_pics(jpg_group):
 		for i in range(1, total_pics+1):
 			image = PIL.Image.open(config.file_path + jpg_group + "-0" + str(i) + "-sm.jpg")
 			if i == 1:
-				bgimage.paste(image, (625, 30))
+				bgimage.paste(image, (625, 10))
 			if i == 2:
 				bgimage.paste(image, (625, 410))
 			if i == 3:
-				bgimage.paste(image, (55, 30))
+				bgimage.paste(image, (10, 10))
 			if i == 4:
-				bgimage.paste(image, (55, 410))
+				bgimage.paste(image, (10, 410))
 
 		now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 		filename = config.file_path + now + '-combined' + str(i) + '.jpg'
@@ -258,7 +258,7 @@ def start_photobooth():
 			camera.start_preview(fullscreen=False,window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
 			camera.preview.alpha = 200
 			
-			for countdown in range(5, 0, -1):
+			for countdown in range(countdown_seconds, 0, -1):
 				display_countdown_number(countdown)
 				time.sleep(1)
 				clear_screen()
@@ -343,7 +343,6 @@ def start_photobooth():
 	
 	#show_image(real_path + "/finished2.png")
 	
-	#time.sleep(restart_delay)
 	show_image(real_path + "/intro.png");
 	GPIO.output(led_pin,True) #turn on the LED
 
