@@ -203,6 +203,15 @@ def display_header_text(text):
 	textpos.centery = 60
 	screen.blit(text, textpos)
 	pygame.display.flip()
+	
+def display_countdown_number(text):
+	font = pygame.font.Font(None, 800)
+	text = font.render(text, 1, (127, 127, 127))
+	textpos = text.get_rect()
+	textpos.centerx = screen.get_rect().centerx
+	textpos.centery = screen.get_rect().centery
+	screen.blit(text, textpos)
+	pygame.display.flip()
 
 # define the photo taking function for when the big button is pressed 
 def start_photobooth(): 
@@ -243,25 +252,16 @@ def start_photobooth():
 		for i in range(1,total_pics+1):
 			camera.hflip = True # preview a mirror image
 			
-			display_header_text("Picture in 5...")
+			display_header_text("Get ready")
 			
 			# Turn on the camera preview overlay
 			camera.resolution = (preview_image_w, preview_image_h)
 			camera.start_preview(fullscreen=False,window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
 			
-			time.sleep(1) #warm up camera
-			clear_screen()
-			display_header_text("4")
-			time.sleep(1)
-			clear_screen()
-			display_header_text("3")
-			time.sleep(1)
-			clear_screen()
-			display_header_text("2")
-			time.sleep(1)
-			clear_screen()
-			display_header_text("1")
-			time.sleep(1)
+			for countdown in range(5, 0, -1):
+				display_countdown_number(countdown)
+				time.sleep(1)
+				clear_screen()
 			
 			GPIO.output(led_pin,True) #turn on the LED
 			
