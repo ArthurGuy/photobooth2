@@ -13,6 +13,7 @@ import socket
 import pygame
 import config # this is the config python file config.py
 from signal import alarm, signal, SIGALRM, SIGKILL
+import PIL.Image
 
 ########################
 ### Variables Config ###
