@@ -173,7 +173,7 @@ def display_pics(jpg_group):
 
 def combine_pics(jpg_group):
 	for i in range(1, total_pics+1):
-		image = PIL.Image.open(config.file_path + jpg_group + "-0" + str(i) + ".jpg")
+		image = PIL.Image.open(config.file_path + jpg_group + "-0" + str(i) + "-sm.jpg")
 		if i == 1:
         		bgimage.paste(image, (625, 30))
 		if i == 2:
@@ -249,6 +249,7 @@ def start_photobooth():
 			# Turn on the camera preview overlay
 			camera.resolution = (preview_image_w, preview_image_h)
 			camera.start_preview(fullscreen=False,window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
+			camera.preview.alpha = 50
 			
 			for countdown in range(5, 0, -1):
 				display_countdown_number(countdown)
