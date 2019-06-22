@@ -25,7 +25,7 @@ btn_pin = 18 # pin for the start button
 total_pics = 3 # number of pics to be taken
 capture_delay = 3 # delay between pics
 prep_delay = 3 # number of seconds before step 1, after button press before countdown
-gif_delay = 50 # How much time between frames in the animated gif
+gif_delay = 25 # How much time between frames in the animated gif
 restart_delay = 5 # how long to display finished message before beginning a new session
 test_server = 'www.google.com'
 
@@ -60,7 +60,7 @@ transfrom_y = monitor_h # how high to scale the jpg when replaying
 offset_x = 0 # how far off to left corner to display photos
 offset_y = 0 # how far off to left corner to display photos
 replay_delay = 1 # how much to wait in-between showing pics on-screen after taking
-replay_cycles = 2 # how many times to show each photo on-screen after taking
+replay_cycles = 1 # how many times to show each photo on-screen after taking
 
 ####################
 ### Other Config ###
@@ -244,16 +244,24 @@ def start_photobooth():
 		for i in range(1,total_pics+1):
 			camera.hflip = True # preview a mirror image
 			
-			display_header_text("Picture in 3...")
+			display_header_text("Picture in 5...")
 			
 			# Turn on the camera preview overlay
 			camera.resolution = (preview_image_w, preview_image_h)
 			camera.start_preview(fullscreen=False,window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
 			
 			time.sleep(1) #warm up camera
-			display_header_text("Picture in 3...2...")
+			clear_screen()
+			display_header_text("Picture in 5...4...")
 			time.sleep(1)
-			display_header_text("Picture in 3...2...1...")
+			clear_screen()
+			display_header_text("Picture in 5...4...3...")
+			time.sleep(1)
+			clear_screen()
+			display_header_text("Picture in 5...4...3...2...")
+			time.sleep(1)
+			clear_screen()
+			display_header_text("Picture in 5...4...3...2...1...")
 			time.sleep(1)
 			
 			GPIO.output(led_pin,True) #turn on the LED
@@ -270,8 +278,8 @@ def start_photobooth():
 			GPIO.output(led_pin,False) #turn off the LED
 			
 			#show_image(real_path + "/pose" + str(i) + ".png")
-			show_image(filename)
-			time.sleep(capture_delay) # pause in-between shots
+			#show_image(filename)
+			#time.sleep(capture_delay) # pause in-between shots
 			
 			clear_screen()
 			if i == total_pics+1:
