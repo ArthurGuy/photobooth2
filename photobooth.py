@@ -172,20 +172,25 @@ def display_pics(jpg_group):
 			time.sleep(replay_delay) # pause
 
 def combine_pics(jpg_group):
-	for i in range(1, total_pics+1):
-		image = PIL.Image.open(config.file_path + jpg_group + "-0" + str(i) + "-sm.jpg")
-		if i == 1:
-        		bgimage.paste(image, (625, 30))
-		if i == 2:
-        		bgimage.paste(image, (625, 410))
-		if i == 3:
-        		bgimage.paste(image, (55, 30))
-		if i == 4:
-        		bgimage.paste(image, (55, 410))
+	try:
+		for i in range(1, total_pics+1):
+			image = PIL.Image.open(config.file_path + jpg_group + "-0" + str(i) + "-sm.jpg")
+			if i == 1:
+				bgimage.paste(image, (625, 30))
+			if i == 2:
+				bgimage.paste(image, (625, 410))
+			if i == 3:
+				bgimage.paste(image, (55, 30))
+			if i == 4:
+				bgimage.paste(image, (55, 410))
 
-	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
-        filename = config.file_path + now + '-combined' + str(i) + '.jpg'
-        bgimage.save(filename)
+		now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
+		filename = config.file_path + now + '-combined' + str(i) + '.jpg'
+		bgimage.save(filename)
+	except Exception, e:
+		tb = sys.exc_info()[2]
+		traceback.print_exception(e.__class__, e, tb)
+		pygame.quit()
 
 def display_header_text(text):
 	font = pygame.font.Font(None, 100)
@@ -233,7 +238,7 @@ def start_photobooth():
 	
 	
 		
-	################################# Begin Step 2 #################################
+	################################# Take the photos #################################
 	
 	print "Taking pics"
 	
@@ -249,7 +254,7 @@ def start_photobooth():
 			# Turn on the camera preview overlay
 			camera.resolution = (preview_image_w, preview_image_h)
 			camera.start_preview(fullscreen=False,window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
-			camera.preview.alpha = 50
+			camera.preview.alpha = 200
 			
 			for countdown in range(5, 0, -1):
 				display_countdown_number(countdown)
@@ -290,23 +295,21 @@ def start_photobooth():
 		camera.close()
 
 		
-	########################### Begin Step 3 #################################
+	########################### Produce the combined images #################################
 	
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
-	
-	combine_pics(now)
 	
 	print "Creating an animated gif" 
 	
 	show_image(real_path + "/processing.png")
 	
+	# Make a small version of the images
+	for x in range(1, total_pics+1): #batch process all the images
+		graphicsmagick = "gm convert -size 800x600 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 800x600 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
+		os.system(graphicsmagick) #do the graphicsmagick action
+				
 	if make_gifs: # make the gifs
 		if hi_res_pics:
-			# first make a smaller version of each image
-			for x in range(1, total_pics+1): #batch process all the images
-				graphicsmagick = "gm convert -size 800x600 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 800x600 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
-				os.system(graphicsmagick) #do the graphicsmagick action
-
 			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*-sm.jpg " + config.file_path + now + ".gif" 
 			os.system(graphicsmagick) #make the .gif
 		else:
@@ -314,8 +317,10 @@ def start_photobooth():
 			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*.jpg " + config.file_path + now + ".gif" 
 			os.system(graphicsmagick) #make the .gif
 
+	# Combine the images into a grid image
+	combine_pics(now)
 	
-	########################### Begin Step 4 #################################
+	########################### Finished #################################
 	
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 	
@@ -328,10 +333,7 @@ def start_photobooth():
 		
 	print "Done"
 	
-	#if config.post_online:
-	#	show_image(real_path + "/finished.png")
-	#else:
-	#	show_image(real_path + "/finished2.png")
+	#show_image(real_path + "/finished2.png")
 	
 	#time.sleep(restart_delay)
 	show_image(real_path + "/intro.png");
