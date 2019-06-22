@@ -24,7 +24,7 @@ btn_pin = 18 # pin for the start button
 total_pics = 3 # number of pics to be taken
 capture_delay = 3 # delay between pics
 prep_delay = 3 # number of seconds before step 1, after button press before countdown
-gif_delay = 25 # How much time between frames in the animated gif
+gif_delay = 20 # How much time between frames in the animated gif
 restart_delay = 5 # how long to display finished message before beginning a new session
 time_to_display_final_image = 5 # How long should the final combined image display for
 
@@ -311,7 +311,7 @@ def start_photobooth():
 	
 	# Make a small version of the images
 	for x in range(1, total_pics+1): #batch process all the images
-		graphicsmagick = "gm convert -size 800x600 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 800x600 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
+		graphicsmagick = "gm convert -size 600x450 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 600x450 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
 		os.system(graphicsmagick) #do the graphicsmagick action
 				
 	if make_gifs: # make the gifs
