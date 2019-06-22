@@ -26,6 +26,7 @@ capture_delay = 3 # delay between pics
 prep_delay = 3 # number of seconds before step 1, after button press before countdown
 gif_delay = 25 # How much time between frames in the animated gif
 restart_delay = 5 # how long to display finished message before beginning a new session
+time_to_display_final_image = 5 # How long should the final combined image display for
 
 monitor_w = 1920    # width of the display monitor
 monitor_h = 1080    # height of the display monitor
@@ -187,6 +188,7 @@ def combine_pics(jpg_group):
 		now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 		filename = config.file_path + now + '-combined' + str(i) + '.jpg'
 		bgimage.save(filename)
+		return filename
 	except Exception, e:
 		tb = sys.exc_info()[2]
 		traceback.print_exception(e.__class__, e, tb)
@@ -322,18 +324,20 @@ def start_photobooth():
 			os.system(graphicsmagick) #make the .gif
 
 	# Combine the images into a grid image
-	combine_pics(now)
+	filename = combine_pics(now)
+	show_image(filename)
+	time.sleep(time_to_display_final_image)
 	
 	########################### Finished #################################
 	
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 	
-	try:
-		display_pics(now)
-	except Exception, e:
-		tb = sys.exc_info()[2]
-		traceback.print_exception(e.__class__, e, tb)
-		pygame.quit()
+	#try:
+	#	display_pics(now)
+	#except Exception, e:
+	#	tb = sys.exc_info()[2]
+	#	traceback.print_exception(e.__class__, e, tb)
+	#	pygame.quit()
 		
 	print "Done"
 	
