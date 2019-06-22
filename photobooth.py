@@ -252,16 +252,16 @@ def start_photobooth():
 			
 			time.sleep(1) #warm up camera
 			clear_screen()
-			display_header_text("Picture in 5...4...")
+			display_header_text("4")
 			time.sleep(1)
 			clear_screen()
-			display_header_text("Picture in 5...4...3...")
+			display_header_text("3")
 			time.sleep(1)
 			clear_screen()
-			display_header_text("Picture in 5...4...3...2...")
+			display_header_text("2")
 			time.sleep(1)
 			clear_screen()
-			display_header_text("Picture in 5...4...3...2...1...")
+			display_header_text("1")
 			time.sleep(1)
 			
 			GPIO.output(led_pin,True) #turn on the LED
@@ -282,8 +282,15 @@ def start_photobooth():
 			#time.sleep(capture_delay) # pause in-between shots
 			
 			clear_screen()
+			
 			if i == total_pics+1:
 				break
+			
+			show_image(filename)
+			display_header_text("You look great!")
+			time.sleep(2)
+			display_header_text("Get ready for the next one!")
+			time.sleep(2)
 	finally:
 		camera.close()
 		
