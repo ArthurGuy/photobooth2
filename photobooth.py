@@ -216,7 +216,6 @@ def start_photobooth():
 	show_image(real_path + "/instructions.png")
 	sleep(prep_delay)
 	
-	# clear the screen
 	clear_screen()
 	
 	camera = picamera.PiCamera(sensor_mode=2)
@@ -289,8 +288,11 @@ def start_photobooth():
 			show_image(filename)
 			display_header_text("You look great!")
 			time.sleep(2)
+			clear_screen()
+			
 			display_header_text("Get ready for the next one!")
 			time.sleep(2)
+			clear_screen()
 	finally:
 		camera.close()
 		
