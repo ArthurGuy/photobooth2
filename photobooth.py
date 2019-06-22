@@ -196,9 +196,9 @@ def display_header_text(text):
 	screen.blit(text, textpos)
 	pygame.display.flip()
 	
-def display_countdown_number(text):
+def display_countdown_number(number):
 	font = pygame.font.Font(None, 800)
-	text = font.render(text, 1, (127, 127, 127))
+	text = font.render(str(number), 1, (127, 127, 127))
 	textpos = text.get_rect()
 	textpos.centerx = screen.get_rect().centerx
 	textpos.centery = screen.get_rect().centery
