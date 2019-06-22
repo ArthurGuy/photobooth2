@@ -95,8 +95,7 @@ def input(events):
         if (event.type == pygame.QUIT or
             (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE)):
             pygame.quit()
-                
-   
+
 
 # set variables to properly display the image on screen at right ratio
 def set_demensions(img_w, img_h):
@@ -142,7 +141,7 @@ def set_demensions(img_w, img_h):
 def show_image(image_path):
 
 	# clear the screen
-	screen.fill( (0,0,0) )
+	screen.fill((0,0,0))
 
 	# load the image
 	img = pygame.image.load(image_path)
@@ -166,7 +165,11 @@ def display_pics(jpg_group):
     for i in range(0, replay_cycles): #show pics a few times
 		for i in range(1, total_pics+1): #show each pic
 			show_image(config.file_path + jpg_group + "-0" + str(i) + ".jpg")
-			time.sleep(replay_delay) # pause 
+			time.sleep(replay_delay) # pause
+
+def combine_pics(jpg_group):
+	for i in range(1, total_pics+1):
+		config.file_path + jpg_group + "-0" + str(i) + ".jpg"
 
 def display_header_text(text):
 	font = pygame.font.Font(None, 100)
