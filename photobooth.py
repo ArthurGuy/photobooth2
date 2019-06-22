@@ -48,8 +48,6 @@ hi_res_pics = True  # True to save high res pics from camera.
                     # False to first capture low res pics. False is faster.
 camera_iso = 400    # adjust for lighting issues. Normal is 100 or 200. Sort of dark is 400. Dark is 800 max.
                     # available options: 100, 200, 320, 400, 500, 640, 800
-#Template frame
-templatePath = real_path + "/background.png"
 	
 #############################
 ### Variables that Change ###
@@ -82,7 +80,7 @@ pygame.mouse.set_visible(False) #hide the mouse cursor
 pygame.display.toggle_fullscreen()
 
 # Load the background template
-bgimage = PIL.Image.open(templatePath)
+bgimage = PIL.Image.open(real_path + "/background.png")
 
 #################
 ### Functions ###
