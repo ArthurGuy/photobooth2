@@ -179,11 +179,11 @@ def combine_pics(jpg_group):
 			if i == 1:
 				bgimage.paste(image, (25, 25))
 			if i == 2:
-				bgimage.paste(image, (675, 25))
+				bgimage.paste(image, (650, 25))
 			if i == 3:
-				bgimage.paste(image, (675, 525))
+				bgimage.paste(image, (25, 500))
 			if i == 4:
-				bgimage.paste(image, (25, 525))
+				bgimage.paste(image, (650, 500))
 
 		now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 		filename = config.file_path + now + '-combined' + str(i) + '.jpg'
