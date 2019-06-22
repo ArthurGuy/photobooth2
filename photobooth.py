@@ -286,12 +286,12 @@ def start_photobooth():
 			
 			clear_screen()
 			
-			if i < total_pics+1:
-				show_image(filename)
-				display_header_text("You look great!")
-				time.sleep(2)
-				clear_screen()
-
+			show_image(filename)
+			display_header_text("You look great!")
+			time.sleep(2)
+			clear_screen()
+				
+			if i < total_pics:
 				display_header_text("Get ready for the next one!")
 				#time.sleep(2)
 				#clear_screen()
@@ -346,16 +346,22 @@ def start_photobooth():
 def wait_for_start():
 	global pygame
 	while True:
-	    input_state = GPIO.input(btn_pin)
-	    if input_state == False:		
-		    return
-	    for event in pygame.event.get():			
-		    if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_ESCAPE:
-			    pygame.quit()
-			if event.key == pygame.K_DOWN:
-			    return
-	    time.sleep(0.2)
+		channel = GPIO.wait_for_edge(btn_pin, GPIO.FALLING, timeout=500)
+		if channel is None:
+			#No event, continue to check for escape key
+		else:
+			# Button press
+			return
+	    	#input_state = GPIO.input(btn_pin)
+	    	#if input_state == False:		
+		#	return
+		for event in pygame.event.get():			
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_ESCAPE:
+					pygame.quit()
+				if event.key == pygame.K_DOWN:
+					return
+		time.sleep(0.2)
 	
 ####################
 ### Main Program ###
@@ -363,7 +369,7 @@ def wait_for_start():
 
 
 print "Photo booth app running..." 
-for x in range(0, 5): #blink light to show the app is running
+for x in range(0, 2): #blink light to show the app is running
 	GPIO.output(led_pin,True)
 	sleep(0.25)
 	GPIO.output(led_pin,False)
