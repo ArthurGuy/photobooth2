@@ -104,9 +104,6 @@ def input(events):
 
 # set variables to properly display the image on screen at right ratio
 def set_demensions(img_w, img_h):
-	# Note this only works when in booting in desktop mode. 
-	# When running in terminal, the size is not correct (it displays small). Why?
-
     # connect to global vars
     global transform_y, transform_x, offset_y, offset_x
 
@@ -269,7 +266,7 @@ def start_photobooth():
 			screen.fill(pygame.Color("white"))
 			pygame.display.flip()
 			
-			filename = config.file_path + base_file_name + '-0' + str(i) + '.jpg'
+			filename = config.file_path + base_file_name + '-' + str(i) + '.jpg'
 			camera.hflip = False # flip back when taking photo
 			camera.resolution = (high_res_w, high_res_h)
 			camera.capture(filename)
@@ -310,7 +307,7 @@ def start_photobooth():
 	
 	# Make a small version of the images
 	for x in range(1, num_pics_to_take+1): #batch process all the images
-		graphicsmagick = "gm convert -size 600x450 " + config.file_path + base_file_name + "-0" + str(x) + ".jpg -thumbnail 600x450 " + config.file_path + base_file_name + "-0" + str(x) + "-sm.jpg"
+		graphicsmagick = "gm convert -size 600x450 " + config.file_path + base_file_name + "-" + str(x) + ".jpg -thumbnail 600x450 " + config.file_path + base_file_name + "-" + str(x) + "-sm.jpg"
 		os.system(graphicsmagick) #do the graphicsmagick action
 				
 	if make_gifs: # make the gifs
@@ -327,6 +324,10 @@ def start_photobooth():
 	show_image(filename)
 	time.sleep(time_to_display_final_image)
 	
+	# Delete the small images
+	for x in range(1, num_pics_to_take + 1):
+		os.remove(config.file_path + base_file_name + "-" + str(x) + "-sm.jpg")
+		
 	########################### Finished #################################
 	
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
