@@ -311,7 +311,7 @@ def start_photobooth():
 	time.sleep(1)
 				
 	if make_gifs: # make the gifs
-		graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + base_file_name + "*-sm.jpg " + config.file_path + base_file_name + ".gif" 
+		graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + base_file_name + "-{0..99}-sm.jpg " + config.file_path + base_file_name + ".gif" 
 		os.system(graphicsmagick) #make the .gif
 
 	# Combine the images into a grid image
