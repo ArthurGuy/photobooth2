@@ -237,7 +237,7 @@ def start_photobooth():
 	
 	print "Taking pics"
 	
-	base_file_name = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
+	base_file_name = time.strftime("%H-%M-%S") #get the current date and time for the start of the filename
 	
 
 	try: # take the photos
