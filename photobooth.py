@@ -166,16 +166,16 @@ def clear_screen():
 	pygame.display.flip()
 
 # display a group of images
-def display_pics(jpg_group):
+def display_pics(base_file_name):
     for i in range(0, replay_cycles): #show pics a few times
 		for i in range(1, total_pics+1): #show each pic
-			show_image(config.file_path + jpg_group + "-0" + str(i) + ".jpg")
+			show_image(config.file_path + base_file_name + "-0" + str(i) + ".jpg")
 			time.sleep(replay_delay) # pause
 
-def combine_pics(jpg_group):
+def combine_pics(base_file_name):
 	try:
 		for i in range(1, total_pics+1):
-			image = PIL.Image.open(config.file_path + jpg_group + "-0" + str(i) + "-sm.jpg")
+			image = PIL.Image.open(config.file_path + base_file_name + "-0" + str(i) + "-sm.jpg")
 			if i == 1:
 				bgimage.paste(image, (25, 25))
 			if i == 2:
@@ -185,8 +185,7 @@ def combine_pics(jpg_group):
 			if i == 4:
 				bgimage.paste(image, (650, 500))
 
-		now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
-		filename = config.file_path + now + '-combined' + str(i) + '.jpg'
+		filename = config.file_path + base_file_name + '-combined.jpg'
 		bgimage.save(filename)
 		return filename
 	except Exception, e:
@@ -244,7 +243,7 @@ def start_photobooth():
 	
 	print "Taking pics"
 	
-	now = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
+	base_file_name = time.strftime("%Y-%m-%d-%H-%M-%S") #get the current date and time for the start of the filename
 	
 
 	try: # take the photos
@@ -270,7 +269,7 @@ def start_photobooth():
 			screen.fill(pygame.Color("white"))
 			pygame.display.flip()
 			
-			filename = config.file_path + now + '-0' + str(i) + '.jpg'
+			filename = config.file_path + base_file_name + '-0' + str(i) + '.jpg'
 			camera.hflip = False # flip back when taking photo
 			camera.resolution = (high_res_w, high_res_h)
 			camera.capture(filename)
@@ -311,20 +310,20 @@ def start_photobooth():
 	
 	# Make a small version of the images
 	for x in range(1, total_pics+1): #batch process all the images
-		graphicsmagick = "gm convert -size 600x450 " + config.file_path + now + "-0" + str(x) + ".jpg -thumbnail 600x450 " + config.file_path + now + "-0" + str(x) + "-sm.jpg"
+		graphicsmagick = "gm convert -size 600x450 " + config.file_path + base_file_name + "-0" + str(x) + ".jpg -thumbnail 600x450 " + config.file_path + base_file_name + "-0" + str(x) + "-sm.jpg"
 		os.system(graphicsmagick) #do the graphicsmagick action
 				
 	if make_gifs: # make the gifs
 		if hi_res_pics:
-			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*-sm.jpg " + config.file_path + now + ".gif" 
+			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + base_file_name + "*-sm.jpg " + config.file_path + base_file_name + ".gif" 
 			os.system(graphicsmagick) #make the .gif
 		else:
 			# make an animated gif with the low resolution images
-			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + now + "*.jpg " + config.file_path + now + ".gif" 
+			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + base_file_name + "*.jpg " + config.file_path + base_file_name + ".gif" 
 			os.system(graphicsmagick) #make the .gif
 
 	# Combine the images into a grid image
-	filename = combine_pics(now)
+	filename = combine_pics(base_file_name)
 	show_image(filename)
 	time.sleep(time_to_display_final_image)
 	
@@ -333,7 +332,7 @@ def start_photobooth():
 	input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
 	
 	#try:
-	#	display_pics(now)
+	#	display_pics(base_file_name)
 	#except Exception, e:
 	#	tb = sys.exc_info()[2]
 	#	traceback.print_exception(e.__class__, e, tb)
