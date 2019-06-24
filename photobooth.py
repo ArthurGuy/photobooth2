@@ -166,13 +166,13 @@ def clear_screen():
 def display_pics(base_file_name):
     for i in range(0, replay_cycles): #show pics a few times
 		for i in range(1, num_pics_to_take+1): #show each pic
-			show_image(config.file_path + base_file_name + "-0" + str(i) + ".jpg")
+			show_image(config.file_path + base_file_name + "-" + str(i) + ".jpg")
 			time.sleep(replay_delay) # pause
 
 def combine_pics(base_file_name):
 	try:
 		for i in range(1, num_pics_to_take+1):
-			image = PIL.Image.open(config.file_path + base_file_name + "-0" + str(i) + "-sm.jpg")
+			image = PIL.Image.open(config.file_path + base_file_name + "-" + str(i) + "-sm.jpg")
 			if i == 1:
 				bgimage.paste(image, (25, 25))
 			if i == 2:
