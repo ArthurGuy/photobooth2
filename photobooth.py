@@ -21,7 +21,7 @@ import PIL.Image
 led_pin = 7 # LED 
 btn_pin = 18 # pin for the start button
 
-total_pics = 3 # number of pics to be taken
+num_pics_to_take = 3 # number of pics to be taken
 countdown_seconds = 4
 capture_delay = 3 # delay between pics
 prep_delay = 3 # number of seconds before step 1, after button press before countdown
@@ -168,13 +168,13 @@ def clear_screen():
 # display a group of images
 def display_pics(base_file_name):
     for i in range(0, replay_cycles): #show pics a few times
-		for i in range(1, total_pics+1): #show each pic
+		for i in range(1, num_pics_to_take+1): #show each pic
 			show_image(config.file_path + base_file_name + "-0" + str(i) + ".jpg")
 			time.sleep(replay_delay) # pause
 
 def combine_pics(base_file_name):
 	try:
-		for i in range(1, total_pics+1):
+		for i in range(1, num_pics_to_take+1):
 			image = PIL.Image.open(config.file_path + base_file_name + "-0" + str(i) + "-sm.jpg")
 			if i == 1:
 				bgimage.paste(image, (25, 25))
@@ -247,7 +247,7 @@ def start_photobooth():
 	
 
 	try: # take the photos
-		for i in range(1,total_pics+1):
+		for i in range(1,num_pics_to_take+1):
 			camera.hflip = True # preview a mirror image
 			
 			#display_header_text("Get ready")
@@ -292,7 +292,7 @@ def start_photobooth():
 			time.sleep(2)
 			clear_screen()
 				
-			if i < total_pics:
+			if i < num_pics_to_take:
 				display_header_text("Get ready for the next one!")
 				#time.sleep(2)
 				#clear_screen()
@@ -309,7 +309,7 @@ def start_photobooth():
 	show_image(real_path + "/processing.png")
 	
 	# Make a small version of the images
-	for x in range(1, total_pics+1): #batch process all the images
+	for x in range(1, num_pics_to_take+1): #batch process all the images
 		graphicsmagick = "gm convert -size 600x450 " + config.file_path + base_file_name + "-0" + str(x) + ".jpg -thumbnail 600x450 " + config.file_path + base_file_name + "-0" + str(x) + "-sm.jpg"
 		os.system(graphicsmagick) #do the graphicsmagick action
 				
