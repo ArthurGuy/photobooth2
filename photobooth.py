@@ -44,9 +44,6 @@ high_res_w = 3280 # width of high res image, if taken
 high_res_h = 2464 # height of high res image, if taken
 
 make_gifs = True    # True to make an animated gif. False to post 4 jpgs into one post.
-hi_res_pics = True  # True to save high res pics from camera.
-                    # If also uploading, the program will also convert each image to a smaller image before making the gif.
-                    # False to first capture low res pics. False is faster.
 camera_iso = 400    # adjust for lighting issues. Normal is 100 or 200. Sort of dark is 400. Dark is 800 max.
                     # available options: 100, 200, 320, 400, 500, 640, 800
 	
@@ -309,15 +306,13 @@ def start_photobooth():
 	for x in range(1, num_pics_to_take+1): #batch process all the images
 		graphicsmagick = "gm convert -size 600x450 " + config.file_path + base_file_name + "-" + str(x) + ".jpg -thumbnail 600x450 " + config.file_path + base_file_name + "-" + str(x) + "-sm.jpg"
 		os.system(graphicsmagick) #do the graphicsmagick action
+	
+	# Allow a moment for the small images to create before we use them
+	time.sleep(1)
 				
 	if make_gifs: # make the gifs
-		if hi_res_pics:
-			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + base_file_name + "*-sm.jpg " + config.file_path + base_file_name + ".gif" 
-			os.system(graphicsmagick) #make the .gif
-		else:
-			# make an animated gif with the low resolution images
-			graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + base_file_name + "*.jpg " + config.file_path + base_file_name + ".gif" 
-			os.system(graphicsmagick) #make the .gif
+		graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + config.file_path + base_file_name + "*-sm.jpg " + config.file_path + base_file_name + ".gif" 
+		os.system(graphicsmagick) #make the .gif
 
 	# Combine the images into a grid image
 	filename = combine_pics(base_file_name)
@@ -325,8 +320,13 @@ def start_photobooth():
 	time.sleep(time_to_display_final_image)
 	
 	# Delete the small images
-	for x in range(1, num_pics_to_take + 1):
-		os.remove(config.file_path + base_file_name + "-" + str(x) + "-sm.jpg")
+	try:
+		for x in range(1, num_pics_to_take + 1):
+			os.remove(config.file_path + base_file_name + "-" + str(x) + "-sm.jpg")
+	except Exception, e:
+		print "Error deleting thmbnails"
+		tb = sys.exc_info()[2]
+		traceback.print_exception(e.__class__, e, tb)
 		
 	########################### Finished #################################
 	
