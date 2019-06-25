@@ -11,7 +11,7 @@
 # 3. Once done with code, run the script by following command
 # $ python SFileUploader.py // if python3.5 is default
 
-
+import glob
 import sys
 import dropbox
 
@@ -21,18 +21,18 @@ from dropbox.exceptions import ApiError, AuthError
 # Access token
 TOKEN = 'TKwbt9fdwwsAAAAAAABVANP1ggLNtwAw-_joRFTntvrOZGmgSVYR2sFZwtp0R7rH'
 
-LOCALFILE = '/home/pi/Pictures/combined'
+LOCALFILE = '/home/pi/Pictures/*-combined.jpg'
 BACKUPPATH = '/photobooth' # Keep the forward slash before destination filename
 
 
 # Uploads contents of LOCALFILE to Dropbox
 def backup():
-    with open(LOCALFILE, 'rb') as f:
+    for file in glob.glob(LOCALFILE):
         # We use WriteMode=overwrite to make sure that the settings in the file
         # are changed on upload
         print("Uploading " + LOCALFILE + " to Dropbox as " + BACKUPPATH + "...")
         try:
-            dbx.files_upload(f.read(), BACKUPPATH, mode=WriteMode('overwrite'))
+            dbx.files_upload(file.read(), BACKUPPATH, mode=WriteMode('overwrite'))
         except ApiError as err:
             # This checks for the specific error where a user doesn't have enough Dropbox space quota to upload this file
             if (err.error.is_path() and
