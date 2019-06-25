@@ -28,8 +28,10 @@ prep_delay = 3 # number of seconds before step 1, after button press before coun
 gif_delay = 20 # How much time between frames in the animated gif
 time_to_display_final_image = 5 # How long should the final combined image display for
 
-monitor_w = 1920    # width of the display monitor
-monitor_h = 1080    # height of the display monitor
+#monitor_w = 1920    # width of the display monitor
+#monitor_h = 1080    # height of the display monitor
+monitor_w = 1024    # width of the display monitor
+monitor_h = 768    # height of the display monitor
 
 # Image ratio 4 x 3
 
