@@ -269,7 +269,7 @@ def start_photobooth():
 	image_folder = file_path + base_file_name
 	os.mkdir(image_folder)
 
-	image_capture_process = False
+	slr_image_capture_process = False
 
 	try:
 		for i in range(1, num_pics_to_take+1):
@@ -282,10 +282,6 @@ def start_photobooth():
 			camera.start_preview(fullscreen=False, window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
 			# Semi transparent image so the countdown text shows through
 			camera.preview.alpha = 200
-
-			if not isinstance(image_capture_process, (int, bool)):
-				while image_capture_process.poll() is None:
-					time.sleep(1)
 
 			# Display the countdown on screen
 			for countdown in range(countdown_seconds, 0, -1):
@@ -300,18 +296,18 @@ def start_photobooth():
 			pygame.display.flip()
 
 			if slr_camera:
-				image_capture_process = Popen(["gphoto2", "--capture-image"])
-			else:
-				# reset the camera to full res and flip the image before taking a shot
-				camera.hflip = False
-				camera.resolution = (high_res_w, high_res_h)
-				filename = file_path + base_file_name + '-' + str(i) + '.jpg'
-				camera.capture(filename)
-				print(filename)
+				slr_image_capture_process = Popen(["gphoto2", "--capture-image"])
 
-				# Go back to a black screen
-				screen.fill(pygame.Color("black"))
-				pygame.display.flip()
+			# reset the camera to full res and flip the image before taking a shot
+			camera.hflip = False
+			camera.resolution = (high_res_w, high_res_h)
+			filename = file_path + base_file_name + '-' + str(i) + '.jpg'
+			camera.capture(filename)
+			print(filename)
+
+			# Go back to a black screen
+			screen.fill(pygame.Color("black"))
+			pygame.display.flip()
 
 			# show_image(filename)
 			# time.sleep(capture_delay) # pause in-between shots
@@ -319,11 +315,11 @@ def start_photobooth():
 			clear_screen()
 
 			if slr_camera:
-				display_header_text("Saving your photo")
+				show_image(filename)
 				# Wait for image capture to complete
-				#if not isinstance(image_capture_process, int):
-				#	while image_capture_process.poll() is None:
-				#		time.sleep(1)
+				if not isinstance(slr_image_capture_process, (int, bool)):
+					while slr_image_capture_process.poll() is None:
+						time.sleep(1)
 			else:
 				show_image(filename)
 				display_header_text("You look great!")
