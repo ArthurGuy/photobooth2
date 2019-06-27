@@ -12,7 +12,7 @@ import pygame
 from signal import alarm, signal, SIGALRM, SIGKILL
 import PIL.Image
 import gphoto2 as gp
-from subprocess import call
+from subprocess import call, Popen
 
 ####################
 # Variables Config #
@@ -290,7 +290,9 @@ def start_photobooth():
 			screen.fill(pygame.Color("white"))
 			pygame.display.flip()
 
-			call(["gphoto2", "--capture-image"])
+			if slr_camera:
+				#call(["gphoto2", "--capture-image"])
+				image_capture_process = Popen(["gphoto2", "--capture-image"])
 
 			# reset the camera to full res and flip the image before taking a shot
 			camera.hflip = False
@@ -310,6 +312,12 @@ def start_photobooth():
 			
 			show_image(filename)
 			display_header_text("You look great!")
+
+			if slr_camera:
+				# Wait for image capture to complete
+				while image_capture_process.poll() is None:
+					time.sleep(1)
+
 			time.sleep(2)
 			clear_screen()
 				
@@ -328,7 +336,8 @@ def start_photobooth():
 	
 	show_image(real_path + "/processing.png")
 
-	call(["gphoto2", "--get-all-files"])
+	if slr_camera:
+		call(["gphoto2", "--get-all-files"])
 	
 	# Make a small version of the images
 	for x in range(1, num_pics_to_take + 1):  # batch process all the images
