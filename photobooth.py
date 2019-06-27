@@ -269,6 +269,8 @@ def start_photobooth():
 	image_folder = file_path + base_file_name
 	os.mkdir(image_folder)
 
+	image_capture_process = False
+
 	try:
 		for i in range(1, num_pics_to_take+1):
 			camera.hflip = True  # preview a mirror image
@@ -280,6 +282,10 @@ def start_photobooth():
 			camera.start_preview(fullscreen=False, window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
 			# Semi transparent image so the countdown text shows through
 			camera.preview.alpha = 200
+
+			if not isinstance(image_capture_process, (int, bool)):
+				while image_capture_process.poll() is None:
+					time.sleep(1)
 
 			# Display the countdown on screen
 			for countdown in range(countdown_seconds, 0, -1):
