@@ -294,7 +294,7 @@ def start_photobooth():
 			pygame.display.flip()
 
 			if slr_camera:
-				image_capture_process = Popen(["gphoto2", "--capture-image"])
+				image_capture_process = Popen(["gphoto2", "--capture-image"]).wait()
 			else:
 				# reset the camera to full res and flip the image before taking a shot
 				camera.hflip = False
