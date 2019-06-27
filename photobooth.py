@@ -1,15 +1,13 @@
 #!/usr/bin/env python
 
 import os
-import glob
 import time
 import traceback
 from time import sleep
 import RPi.GPIO as GPIO
-import picamera  # http://picamera.readthedocs.org/en/release-1.4/install2.html
+import picamera
 import atexit
 import sys
-import socket
 import pygame
 from signal import alarm, signal, SIGALRM, SIGKILL
 import PIL.Image
@@ -23,13 +21,14 @@ button_pin = 18  # pin for the start button
 
 file_path = '/home/pi/Pictures/'  # path to save images
 
+# Timings
 num_pics_to_take = 3  # number of pics to be taken
 countdown_seconds = 4  # On screen visual countdown
-capture_delay = 3  # delay between pics
-prep_delay = 3  # number of seconds before step 1, after button press before countdown
-gif_delay = 20  # How much time between frames in the animated gif
-time_to_display_final_image = 5  # How long should the final combined image display for
+# capture_delay = 3  # delay between pics
+time_to_display_instructions = 3  # number of seconds to display instruction screen
+time_to_display_photo_grid_image = 5  # How long should the final combined image display for
 time_to_display_finished_screen = 4  # The final finished graphic should display for this long
+gif_delay = 20  # How much time between frames in the animated gif
 
 # widescreen monitor 1920 x 1080
 # small booth monitor 1024 x 768
@@ -43,13 +42,12 @@ preview_image_w = 800
 preview_image_h = 600
 
 # full frame of the camera is 3280x2464
-# if you run into resource issues, try smaller, like 1920x1152. 
-# or increase memory http://picamera.readthedocs.io/en/release-1.12/fov.html#hardware-limits
-high_res_w = 3280  # width of high res image, if taken
-high_res_h = 2464  # height of high res image, if taken
+high_res_w = 3280  # width of high res image
+high_res_h = 2464  # height of high res image
 
-make_gifs = True    # True to make an animated gif. False to post 4 jpgs into one post.
+make_gif = True
 make_photo_grid_image = True
+
 camera_iso = 400    # adjust for lighting issues. Normal is 100 or 200. Sort of dark is 400. Dark is 800 max.
 					# available options: 100, 200, 320, 400, 500, 640, 800
 
@@ -244,7 +242,7 @@ def start_photobooth():
 	print "Get Ready"
 	GPIO.output(button_led_pin, False)
 	show_image(real_path + "/instructions.png")
-	sleep(prep_delay)
+	sleep(time_to_display_instructions)
 	
 	clear_screen()
 	
@@ -297,8 +295,7 @@ def start_photobooth():
 			# Go back to a black screen
 			screen.fill(pygame.Color("black"))
 			pygame.display.flip()
-			
-			# show_image(real_path + "/pose" + str(i) + ".png")
+
 			# show_image(filename)
 			# time.sleep(capture_delay) # pause in-between shots
 			
@@ -332,14 +329,14 @@ def start_photobooth():
 	# Allow a moment for the small images to create before we use them
 	# time.sleep(1)
 				
-	if make_gifs:
+	if make_gif:
 		graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + file_path + base_file_name + "-*-sm.jpg " + file_path + base_file_name + ".gif"
 		os.system(graphicsmagick)
 
 	if make_photo_grid_image:
 		filename = combine_pics(base_file_name)
 		show_image(filename)
-		time.sleep(time_to_display_final_image)
+		time.sleep(time_to_display_photo_grid_image)
 	
 	# Delete the small images
 	try:
