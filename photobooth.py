@@ -290,7 +290,7 @@ def start_photobooth():
 			screen.fill(pygame.Color("white"))
 			pygame.display.flip()
 
-			call(["gphoto2", "--capture-image-and-download"])
+			call(["gphoto2", "--capture-image"])
 
 			# reset the camera to full res and flip the image before taking a shot
 			camera.hflip = False
@@ -321,6 +321,8 @@ def start_photobooth():
 		camera.close()
 
 	# Produce the combined images
+
+	call(["gphoto2", "--get-all-files"])
 	
 	# input(pygame.event.get())
 	
