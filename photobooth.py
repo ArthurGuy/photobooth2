@@ -321,14 +321,14 @@ def start_photobooth():
 		camera.close()
 
 	# Produce the combined images
-
-	call(["gphoto2", "--get-all-files"])
 	
 	# input(pygame.event.get())
 	
 	print "Creating an animated gif" 
 	
 	show_image(real_path + "/processing.png")
+
+	call(["gphoto2", "--get-all-files"])
 	
 	# Make a small version of the images
 	for x in range(1, num_pics_to_take + 1):  # batch process all the images
