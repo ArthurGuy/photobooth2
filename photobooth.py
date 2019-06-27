@@ -295,30 +295,31 @@ def start_photobooth():
 
 			if slr_camera:
 				image_capture_process = Popen(["gphoto2", "--capture-image"])
+			else:
+				# reset the camera to full res and flip the image before taking a shot
+				camera.hflip = False
+				camera.resolution = (high_res_w, high_res_h)
+				filename = file_path + base_file_name + '-' + str(i) + '.jpg'
+				camera.capture(filename)
+				print(filename)
 
-			# reset the camera to full res and flip the image before taking a shot
-			camera.hflip = False
-			camera.resolution = (high_res_w, high_res_h)
-			filename = file_path + base_file_name + '-' + str(i) + '.jpg'
-			camera.capture(filename)
-			print(filename)
-
-			# Go back to a black screen
-			screen.fill(pygame.Color("black"))
-			pygame.display.flip()
+				# Go back to a black screen
+				screen.fill(pygame.Color("black"))
+				pygame.display.flip()
 
 			# show_image(filename)
 			# time.sleep(capture_delay) # pause in-between shots
 			
 			clear_screen()
 
-			show_image(filename)
-			display_header_text("You look great!")
-
 			if slr_camera:
+				display_header_text("Saving your photo")
 				# Wait for image capture to complete
 				while image_capture_process.poll() is None:
 					time.sleep(1)
+			else:
+				show_image(filename)
+				display_header_text("You look great!")
 
 			if time_to_display_image_after_capture:
 				time.sleep(time_to_display_image_after_capture)
