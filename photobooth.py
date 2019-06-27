@@ -12,6 +12,7 @@ import pygame
 from signal import alarm, signal, SIGALRM, SIGKILL
 import PIL.Image
 import gphoto2 as gp
+from subprocess import call
 
 ####################
 # Variables Config #
@@ -100,10 +101,10 @@ bgimage = PIL.Image.open(real_path + "/background.png")
 
 def setup_slr_camera():
 	global slr_camera
-	context = gp.Context()
-	camera = gp.Camera()
+	slr_context = gp.Context()
+	slr_camera = gp.Camera()
 	try:
-		camera.init(context)
+		slr_camera.init(slr_context)
 		slr_camera = 1
 	except gp.GPhoto2Error as ex:
 		slr_camera = 0
@@ -288,6 +289,8 @@ def start_photobooth():
 			# Flash the screen white to simulate the image being taken
 			screen.fill(pygame.Color("white"))
 			pygame.display.flip()
+
+			call(["gphoto2", "--capture-image-and-download"])
 
 			# reset the camera to full res and flip the image before taking a shot
 			camera.hflip = False
