@@ -25,12 +25,12 @@ button_pin = 24  # pin for the start button
 file_path = '/home/pi/Pictures/'  # path to save images
 
 # Timings
-num_pics_to_take = 3  # number of pics to be taken
-countdown_seconds = 4  # On screen visual countdown
+num_pics_to_take = 2  # number of pics to be taken
+countdown_seconds = 3  # On screen visual countdown
 # capture_delay = 3  # delay between pics
 time_to_display_instructions = 3  # number of seconds to display instruction screen
-time_to_display_photo_grid_image = 5  # How long should the final combined image display for
-time_to_display_finished_screen = 4  # The final finished graphic should display for this long
+time_to_display_photo_grid_image = 3  # How long should the final combined image display for
+time_to_display_finished_screen = 3  # The final finished graphic should display for this long
 gif_delay = 20  # How much time between frames in the animated gif
 
 # widescreen monitor 1920 x 1080
