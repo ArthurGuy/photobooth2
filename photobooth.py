@@ -345,6 +345,8 @@ def start_photobooth():
 			print "Downloaded the following images:"
 			for slr_photo in os.listdir(image_folder):
 				print slr_photo
+				show_image(image_folder + "/" + slr_photo)
+				time.sleep(2)
 		except Exception, e:
 			print "Error downloading photos from camera"
 			tb = sys.exc_info()[2]
