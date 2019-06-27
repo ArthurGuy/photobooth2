@@ -16,9 +16,10 @@ import gphoto2 as gp
 ####################
 # Variables Config #
 ####################
-button_led_pin = 7  # LED
-status_led_pin = 29  # red LED
-button_pin = 18  # pin for the start button
+# Pin numbers - BCM labeling
+button_led_pin = 4  # LED
+status_led_pin = 21  # red LED
+button_pin = 24  # pin for the start button
 
 file_path = '/home/pi/Pictures/'  # path to save images
 
@@ -72,7 +73,7 @@ slr_camera = 0  # Are we using a proper camera to take photos
 real_path = os.path.dirname(os.path.realpath(__file__))
 
 # GPIO setup
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(button_led_pin, GPIO.OUT)
 GPIO.output(button_led_pin, False)
 GPIO.setup(status_led_pin, GPIO.OUT)
