@@ -190,10 +190,12 @@ def display_pics(base_file_name):
 			time.sleep(replay_delay) # pause
 
 
-def combine_pics(base_file_name):
+def combine_pics(photo_list, save_filename):
 	try:
-		for i in range(1, num_pics_to_take+1):
-			image = PIL.Image.open(file_path + base_file_name + "-" + str(i) + "-sm.jpg")
+		i = 0
+		for photo_path in photo_list:
+			i = i + 1
+			image = PIL.Image.open(photo_path)
 			if i == 1:
 				bgimage.paste(image, (25, 25))
 			if i == 2:
@@ -203,9 +205,7 @@ def combine_pics(base_file_name):
 			if i == 4:
 				bgimage.paste(image, (650, 500))
 
-		filename = file_path + base_file_name + '-combined.jpg'
-		bgimage.save(filename)
-		return filename
+		bgimage.save(save_filename)
 	except Exception, e:
 		tb = sys.exc_info()[2]
 		traceback.print_exception(e.__class__, e, tb)
@@ -343,8 +343,10 @@ def start_photobooth():
 			call(["gphoto2", "--get-all-files"], cwd=image_folder)
 			call(["gphoto2", "--delete-all-files", "--recurse"])
 			print "Downloaded the following images:"
+			photo_list = []
 			for slr_photo in os.listdir(image_folder):
 				print slr_photo
+				photo_list.append(image_folder + "/" + slr_photo)
 				show_image(image_folder + "/" + slr_photo)
 				time.sleep(2)
 		except Exception, e:
@@ -365,7 +367,12 @@ def start_photobooth():
 		os.system(graphicsmagick)
 
 	if make_photo_grid_image:
-		filename = combine_pics(base_file_name)
+		photo_list = []
+		for i in range(1, num_pics_to_take+1):
+			photo_list.append(file_path + base_file_name + "-" + str(i) + "-sm.jpg")
+
+		filename = file_path + base_file_name + '-combined.jpg'
+		combine_pics(photo_list, filename)
 		show_image(filename)
 		time.sleep(time_to_display_photo_grid_image)
 	
