@@ -338,7 +338,7 @@ def start_photobooth():
 
 	if slr_camera:
 		try:
-			call(["cd /home/pi/Pictures/ && gphoto2", "--get-all-files"])
+			call(["gphoto2", "--get-all-files"], cwd=file_path)
 		except Exception, e:
 			print "Error downloading photos from camera"
 			tb = sys.exc_info()[2]
