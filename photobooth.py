@@ -315,9 +315,9 @@ def start_photobooth():
 			if slr_camera:
 				display_header_text("Saving your photo")
 				# Wait for image capture to complete
-				if not isinstance(image_capture_process, int):
-					while image_capture_process.poll() is None:
-						time.sleep(1)
+				#if not isinstance(image_capture_process, int):
+				#	while image_capture_process.poll() is None:
+				#		time.sleep(1)
 			else:
 				show_image(filename)
 				display_header_text("You look great!")
