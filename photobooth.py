@@ -337,7 +337,12 @@ def start_photobooth():
 	show_image(real_path + "/processing.png")
 
 	if slr_camera:
-		call(["cd "+file_path+" && gphoto2", "--get-all-files"])
+		try:
+			call(["cd "+file_path+" && gphoto2", "--get-all-files"])
+		except Exception, e:
+			print "Error downloading photos from camera"
+			tb = sys.exc_info()[2]
+			traceback.print_exception(e.__class__, e, tb)
 	
 	# Make a small version of the images
 	for x in range(1, num_pics_to_take + 1):  # batch process all the images
