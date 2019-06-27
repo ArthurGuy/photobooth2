@@ -265,6 +265,8 @@ def start_photobooth():
 	print "Taking pics"
 	
 	base_file_name = time.strftime("%H-%M-%S")  # get the current time for the start of the filename
+	image_folder = file_path + base_file_name
+	os.mkdir(image_folder)
 
 	try:
 		for i in range(1, num_pics_to_take+1):
@@ -338,8 +340,11 @@ def start_photobooth():
 
 	if slr_camera:
 		try:
-			call(["gphoto2", "--get-all-files"], cwd=file_path)
+			call(["gphoto2", "--get-all-files"], cwd=image_folder)
 			call(["gphoto2", "--delete-all-files", "--recurse"])
+			print "Downloaded the following images:"
+			for slr_photo in os.listdir(image_folder):
+				print slr_photo
 		except Exception, e:
 			print "Error downloading photos from camera"
 			tb = sys.exc_info()[2]
