@@ -100,7 +100,7 @@ bgimage = PIL.Image.open(real_path + "/background.png")
 #############
 
 
-def setup_slr_camera():
+def detect_slr_camera():
 	global slr_camera
 	slr_context = gp.Context()
 	slr_camera = gp.Camera()
@@ -109,6 +109,13 @@ def setup_slr_camera():
 		slr_camera = 1
 	except gp.GPhoto2Error as ex:
 		slr_camera = 0
+
+	if slr_camera:
+		print "SLR Camera connected"
+		GPIO.output(status_led_pin, True)
+	else:
+		print "NO SLR Camera connected"
+		GPIO.output(status_led_pin, False)
 
 
 # clean up running programs as needed when main program exits
@@ -248,6 +255,10 @@ def start_photobooth():
 	print "Get Ready"
 	GPIO.output(button_led_pin, False)
 	show_image(real_path + "/instructions.png")
+
+	# Keep the camera status updated
+	detect_slr_camera()
+
 	sleep(time_to_display_instructions)
 	
 	clear_screen()
@@ -432,14 +443,7 @@ def wait_for_start():
 
 print "Photo booth app starting..."
 
-setup_slr_camera()
-
-if slr_camera:
-	print "SLR Camera connected"
-	GPIO.output(status_led_pin, True)
-else:
-	print "NO SLR Camera connected"
-	GPIO.output(status_led_pin, False)
+detect_slr_camera()
 
 for x in range(0, 2):  # blink light to show the app is running
 	GPIO.output(button_led_pin, True)
