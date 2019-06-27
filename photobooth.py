@@ -14,6 +14,7 @@ import pygame
 import config # this is the config python file config.py
 from signal import alarm, signal, SIGALRM, SIGKILL
 import PIL.Image
+import gphoto2 as gp
 
 ########################
 ### Variables Config ###
@@ -59,6 +60,7 @@ offset_x = 0 # how far off to left corner to display photos
 offset_y = 0 # how far off to left corner to display photos
 replay_delay = 1 # how much to wait in-between showing pics on-screen after taking
 replay_cycles = 1 # how many times to show each photo on-screen after taking
+slr_camera = 0 # Are we using a proper camera to take photos
 
 ####################
 ### Other Config ###
@@ -81,6 +83,15 @@ pygame.display.toggle_fullscreen()
 
 # Load the background template
 bgimage = PIL.Image.open(real_path + "/background.png")
+
+# Setup the gphoto cammera connection
+context = gp.Context()
+camera = gp.Camera()
+try:
+	camera.init(context)
+	slr_camera = 1
+except gp.GPhoto2Error as ex:
+	slr_camera = 0
 
 #################
 ### Functions ###
@@ -372,6 +383,12 @@ def wait_for_start():
 
 
 print "Photo booth app running..." 
+
+if slr_camera:
+	print "SLR Camera connected"
+else:
+	print "NO SLR Canera connected"
+
 for x in range(0, 2): #blink light to show the app is running
 	GPIO.output(led_pin,True)
 	sleep(0.25)
