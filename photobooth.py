@@ -17,6 +17,7 @@ import gphoto2 as gp
 # Variables Config #
 ####################
 button_led_pin = 7  # LED
+status_led_pin = 29  # red LED
 button_pin = 18  # pin for the start button
 
 file_path = '/home/pi/Pictures/'  # path to save images
@@ -74,6 +75,8 @@ real_path = os.path.dirname(os.path.realpath(__file__))
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(button_led_pin, GPIO.OUT)
 GPIO.output(button_led_pin, False)
+GPIO.setup(status_led_pin, GPIO.OUT)
+GPIO.output(status_led_pin, False)
 GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
@@ -389,8 +392,10 @@ setup_slr_camera()
 
 if slr_camera:
 	print "SLR Camera connected"
+	GPIO.output(status_led_pin, True)
 else:
 	print "NO SLR Camera connected"
+	GPIO.output(status_led_pin, False)
 
 for x in range(0, 2):  # blink light to show the app is running
 	GPIO.output(button_led_pin, True)
