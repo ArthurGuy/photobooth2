@@ -337,7 +337,7 @@ def start_photobooth():
 	show_image(real_path + "/processing.png")
 
 	if slr_camera:
-		call(["gphoto2", "--get-all-files", "--folder="+file_path])
+		call(["cd "+file_path+" && gphoto2", "--get-all-files"])
 	
 	# Make a small version of the images
 	for x in range(1, num_pics_to_take + 1):  # batch process all the images
