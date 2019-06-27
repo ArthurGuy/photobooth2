@@ -29,6 +29,7 @@ num_pics_to_take = 2  # number of pics to be taken
 countdown_seconds = 3  # On screen visual countdown
 # capture_delay = 3  # delay between pics
 time_to_display_instructions = 3  # number of seconds to display instruction screen
+time_to_display_image_after_capture = 0
 time_to_display_photo_grid_image = 3  # How long should the final combined image display for
 time_to_display_finished_screen = 3  # The final finished graphic should display for this long
 gif_delay = 20  # How much time between frames in the animated gif
@@ -293,7 +294,6 @@ def start_photobooth():
 			pygame.display.flip()
 
 			if slr_camera:
-				#call(["gphoto2", "--capture-image"])
 				image_capture_process = Popen(["gphoto2", "--capture-image"])
 
 			# reset the camera to full res and flip the image before taking a shot
@@ -311,7 +311,7 @@ def start_photobooth():
 			# time.sleep(capture_delay) # pause in-between shots
 			
 			clear_screen()
-			
+
 			show_image(filename)
 			display_header_text("You look great!")
 
@@ -320,7 +320,9 @@ def start_photobooth():
 				while image_capture_process.poll() is None:
 					time.sleep(1)
 
-			time.sleep(2)
+			if time_to_display_image_after_capture:
+				time.sleep(time_to_display_image_after_capture)
+
 			clear_screen()
 				
 			if i < num_pics_to_take:
@@ -338,15 +340,15 @@ def start_photobooth():
 	
 	show_image(real_path + "/processing.png")
 
+	slr_photo_list = []
 	if slr_camera:
 		try:
 			call(["gphoto2", "--get-all-files"], cwd=image_folder)
 			call(["gphoto2", "--delete-all-files", "--recurse"])
 			print "Downloaded the following images:"
-			photo_list = []
 			for slr_photo in os.listdir(image_folder):
 				print slr_photo
-				photo_list.append(image_folder + "/" + slr_photo)
+				slr_photo_list.append(image_folder + "/" + slr_photo)
 				show_image(image_folder + "/" + slr_photo)
 				time.sleep(2)
 		except Exception, e:
@@ -368,8 +370,11 @@ def start_photobooth():
 
 	if make_photo_grid_image:
 		photo_list = []
-		for i in range(1, num_pics_to_take+1):
-			photo_list.append(file_path + base_file_name + "-" + str(i) + "-sm.jpg")
+		if slr_camera:
+			photo_list = slr_photo_list
+		else:
+			for i in range(1, num_pics_to_take+1):
+				photo_list.append(file_path + base_file_name + "-" + str(i) + "-sm.jpg")
 
 		filename = file_path + base_file_name + '-combined.jpg'
 		combine_pics(photo_list, filename)
