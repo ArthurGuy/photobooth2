@@ -339,6 +339,7 @@ def start_photobooth():
 	if slr_camera:
 		try:
 			call(["gphoto2", "--get-all-files"], cwd=file_path)
+			call(["gphoto2", "--delete-all-files"])
 		except Exception, e:
 			print "Error downloading photos from camera"
 			tb = sys.exc_info()[2]
