@@ -273,11 +273,20 @@ def start_pi_cam_image_test():
 	camera = picamera.PiCamera(sensor_mode=2)
 	camera.resolution = (preview_image_w, preview_image_h)
 	camera.start_preview(fullscreen=False, window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
-	time.sleep(5)
+	wait_for_x()
 	camera.stop_preview()
 
 	show_image(real_path + "/intro.png")
 	GPIO.output(button_led_pin, True)
+
+
+def wait_for_x():
+	while True:
+		for event in pygame.event.get():
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_x:
+					return
+		time.sleep(0.2)
 
 
 # define the photo taking function for when the big button is pressed 
