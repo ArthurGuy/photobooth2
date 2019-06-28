@@ -241,8 +241,15 @@ def display_countdown_number(number):
 
 
 # Capture images from both cameras and display
-def start_image_test():
-	print "Testing cameras"
+def start_slr_image_test():
+	print "Testing slr camera"
+	image_folder = file_path + "testing/"
+	os.mkdir(image_folder)
+	call(["gphoto2", "--capture-image-and-download"], cwd=image_folder)
+	for slr_photo in os.listdir(image_folder):
+		print slr_photo
+		show_image(image_folder + "/" + slr_photo)
+		time.sleep(5)
 
 
 # define the photo taking function for when the big button is pressed 
@@ -441,6 +448,8 @@ def wait_for_start():
 					pygame.quit()
 				if event.key == pygame.K_DOWN:
 					return
+				if event.key == pygame.K_c:
+					start_slr_image_test()
 		time.sleep(0.2)
 	
 ################
