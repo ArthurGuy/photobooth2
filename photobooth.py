@@ -45,6 +45,10 @@ monitor_h = 768
 preview_image_w = 800
 preview_image_h = 600
 
+# Preview screen should be centered on the screen
+preview_window_x = (monitor_w - preview_image_w) / 2
+preview_window_y = (monitor_h - preview_image_h) / 2
+
 # full frame of the camera is 3280x2464
 high_res_w = 3280  # width of high res image
 high_res_h = 2464  # height of high res image
@@ -260,6 +264,21 @@ def start_slr_image_test():
 	GPIO.output(button_led_pin, True)
 
 
+def start_pi_cam_image_test():
+	GPIO.output(button_led_pin, False)
+	clear_screen()
+	show_image(real_path + "/processing.png")
+
+	print "Testing pi camera"
+	camera = picamera.PiCamera(sensor_mode=2)
+	camera.resolution = (preview_image_w, preview_image_h)
+	camera.start_preview(fullscreen=False, window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
+	time.sleep(5)
+
+	show_image(real_path + "/intro.png")
+	GPIO.output(button_led_pin, True)
+
+
 # define the photo taking function for when the big button is pressed 
 def start_photobooth(): 
 
@@ -282,10 +301,6 @@ def start_photobooth():
 	camera.vflip = False
 	camera.hflip = True # flip for preview, showing users a mirror image
 	camera.iso = camera_iso
-
-	# Preview screen should be centered on the screen
-	preview_window_x = (monitor_w - preview_image_w) / 2
-	preview_window_y = (monitor_h - preview_image_h) / 2
 		
 	# Take the photos
 	
@@ -456,7 +471,9 @@ def wait_for_start():
 					pygame.quit()
 				if event.key == pygame.K_DOWN:
 					return
-				if event.key == pygame.K_c:
+				if event.key == pygame.K_1:
+					start_pi_cam_image_test()
+				if event.key == pygame.K_2:
 					start_slr_image_test()
 		time.sleep(0.2)
 	
