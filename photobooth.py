@@ -335,6 +335,17 @@ def wait_for_x():
 		time.sleep(0.2)
 
 
+def delete_photos_from_slr():
+	slr_image_capture_process = Popen(["gphoto2", "--delete-all-files", "--recurse"])
+	wait_count = 0
+	if not isinstance(slr_image_capture_process, (int, bool)):
+		while slr_image_capture_process.poll() is None:
+			wait_count += 1
+			time.sleep(1)
+			if wait_count >= 10:
+				raise Exception("Waited to long deleting photos from slr camera")
+
+
 # define the photo taking function for when the big button is pressed 
 def start_photobooth():
 
@@ -430,8 +441,6 @@ def start_photobooth():
 
 	# Produce the combined images
 	
-	# input(pygame.event.get())
-	
 	print "Creating an animated gif" 
 	
 	show_image(real_path + "/processing.png")
@@ -440,8 +449,18 @@ def start_photobooth():
 	slr_photo_list_small = []
 	if slr_camera:
 		try:
-			call(["gphoto2", "--get-all-files"], cwd=image_folder)
-			call(["gphoto2", "--delete-all-files", "--recurse"])
+			slr_image_capture_process = Popen(["gphoto2", "--get-all-files"], cwd=image_folder)
+			wait_count = 0
+			if not isinstance(slr_image_capture_process, (int, bool)):
+				while slr_image_capture_process.poll() is None:
+					wait_count += 1
+					time.sleep(1)
+					if wait_count >= 10:
+						raise Exception("Waited to long downloading photos fom slr camera")
+
+			delete_photos_from_slr()
+			# call(["gphoto2", "--get-all-files"], cwd=image_folder)
+			# call(["gphoto2", "--delete-all-files", "--recurse"])
 			print "Downloaded the following images:"
 			for slr_photo in os.listdir(image_folder):
 				print slr_photo
