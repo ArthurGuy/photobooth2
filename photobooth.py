@@ -155,23 +155,20 @@ def set_dimensions(img_w, img_h):
 	# based on output screen resolution, calculate how to display
 	ratio_h = (monitor_w * img_h) / img_w
 
-	if (ratio_h < monitor_h):
-		#Use horizontal black bars
-		#print "horizontal black bars"
+	if ratio_h < monitor_h:
+		# Use horizontal black bars
 		transform_y = ratio_h
 		transform_x = monitor_w
 		offset_y = (monitor_h - ratio_h) / 2
 		offset_x = 0
-	elif (ratio_h > monitor_h):
-		#Use vertical black bars
-		#print "vertical black bars"
+	elif ratio_h > monitor_h:
+		# Use vertical black bars
 		transform_x = (monitor_h * img_w) / img_h
 		transform_y = monitor_h
 		offset_x = (monitor_w - transform_x) / 2
 		offset_y = 0
 	else:
-		#No need for black bars as photo ratio equals screen ratio
-		#print "no black bars"
+		# No need for black bars as photo ratio equals screen ratio
 		transform_x = monitor_w
 		transform_y = monitor_h
 		offset_y = offset_x = 0
@@ -185,14 +182,14 @@ def show_image(image_path):
 
 	# load the image
 	img = pygame.image.load(image_path)
-	img = img.convert() 
+	img = img.convert()  # convert to a simple object that's quicker to work with
 
 	# set pixel dimensions based on image
 	set_dimensions(img.get_width(), img.get_height())
 
 	# rescale the image to fit the current display
 	img = pygame.transform.scale(img, (transform_x, transfrom_y))
-	screen.blit(img, (offset_x, offset_y/2))
+	screen.blit(img, (0, 0))
 	pygame.display.flip()
 
 	# print "offset x: " + str(offset_x)
