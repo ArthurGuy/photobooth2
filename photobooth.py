@@ -455,7 +455,7 @@ def start_photobooth():
 				while slr_image_capture_process.poll() is None:
 					wait_count += 1
 					time.sleep(1)
-					if wait_count >= 10:
+					if wait_count >= 20:
 						raise Exception("Waited to long downloading photos fom slr camera")
 
 			delete_photos_from_slr()
