@@ -207,14 +207,6 @@ def clear_screen():
 	pygame.display.flip()
 
 
-# display a group of images
-def display_pics(base_file_name):
-	for i in range(0, replay_cycles):  # show pics a few times
-		for i in range(1, num_pics_to_take+1):  # show each pic
-			show_image(file_path + base_file_name + "-" + str(i) + ".jpg")
-			time.sleep(replay_delay) # pause
-
-
 def combine_pics(photo_list, save_filename):
 	try:
 		i = 0
@@ -259,6 +251,8 @@ def display_countdown_number(number):
 
 # Capture images from both cameras and display
 def start_slr_image_test():
+	if not slr_camera:
+		return
 	GPIO.output(button_led_pin, False)
 	clear_screen()
 	show_image(real_path + "/processing.png")
@@ -297,6 +291,8 @@ def start_pi_cam_image_test():
 
 
 def start_cam_comparison_test():
+	if not slr_camera:
+		return
 	GPIO.output(button_led_pin, False)
 	clear_screen()
 	show_image(real_path + "/processing.png")
@@ -500,8 +496,6 @@ def start_photobooth():
 	# Finished
 	
 	# input(pygame.event.get())
-
-	# display_pics(base_file_name)
 
 	if time_to_display_finished_screen > 0:
 		show_image(real_path + "/finished.png")
