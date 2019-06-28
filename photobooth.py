@@ -291,6 +291,35 @@ def start_pi_cam_image_test():
 	setup_intro_display()
 
 
+def start_cam_comparison_test():
+	GPIO.output(button_led_pin, False)
+	clear_screen()
+	show_image(real_path + "/processing.png")
+
+	print "Checking camera"
+
+	image_folder = file_path + "testing/" + time.strftime("%Y-%m-%d-%H-%M-%S") + "/"
+	if not os.path.exists(image_folder):
+		os.makedirs(image_folder)
+
+	camera = setup_pi_camera()
+	try:
+		camera.resolution = (preview_image_w, preview_image_h)
+		camera.start_preview(fullscreen=False, window=(0, 0, preview_image_w/2, preview_image_h/2))
+
+		call(["gphoto2", "--capture-image-and-download"], cwd=image_folder)
+		for slr_photo in os.listdir(image_folder):
+			show_image(image_folder + "/" + slr_photo)
+
+		wait_for_x()
+
+		camera.stop_preview()
+	finally:
+		camera.close()
+
+	setup_intro_display()
+
+
 def setup_intro_display():
 	show_image(real_path + "/intro.png")
 	GPIO.output(button_led_pin, True)
@@ -306,9 +335,7 @@ def wait_for_x():
 
 
 # define the photo taking function for when the big button is pressed 
-def start_photobooth(): 
-
-	# input(pygame.event.get())
+def start_photobooth():
 
 	# Display the instructions screen and prep the camera
 	
@@ -322,11 +349,7 @@ def start_photobooth():
 	sleep(time_to_display_instructions)
 	
 	clear_screen()
-	
-	# camera = picamera.PiCamera(sensor_mode=2)
-	# camera.vflip = False
-	# camera.hflip = True # flip for preview, showing users a mirror image
-	# camera.iso = camera_iso
+
 	camera = setup_pi_camera()
 		
 	# Take the photos
@@ -501,6 +524,8 @@ def wait_for_start():
 					start_pi_cam_image_test()
 				if event.key == pygame.K_2:
 					start_slr_image_test()
+				if event.key == pygame.K_3:
+					start_cam_comparison_test()
 		time.sleep(0.2)
 	
 ################
