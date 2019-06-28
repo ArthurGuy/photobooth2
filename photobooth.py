@@ -276,7 +276,7 @@ def start_photobooth():
 	
 	print "Taking pics"
 	
-	base_file_name = time.strftime("%H-%M-%S")  # get the current time for the start of the filename
+	base_file_name = time.strftime("%Y-%m-%d-%H-%M-%S")  # get the current time for the start of the filename
 	image_folder = file_path + base_file_name
 	os.mkdir(image_folder)
 
@@ -367,9 +367,9 @@ def start_photobooth():
 				slr_photo_list.append(image_folder + "/" + slr_photo)
 				graphicsmagick = "gm convert -size 600x450 " + image_folder + "/" + slr_photo + " -thumbnail 600x450 " + image_folder + "/" + slr_photo + "-" + "-sm.jpg"
 				os.system(graphicsmagick)
-				slr_photo_list_small.append(image_folder + "/" + slr_photo)
-				show_image(image_folder + "/" + slr_photo + "-" + "-sm.jpg")
-				time.sleep(2)
+				slr_photo_list_small.append(image_folder + "/" + slr_photo + "-" + "-sm.jpg")
+				# show_image(image_folder + "/" + slr_photo + "-" + "-sm.jpg")
+				# time.sleep(2)
 		except Exception, e:
 			print "Error downloading photos from camera"
 			tb = sys.exc_info()[2]
