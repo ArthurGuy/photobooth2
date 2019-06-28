@@ -194,8 +194,8 @@ def show_image(image_path):
 
 	# print "offset x: " + str(offset_x)
 	# print "offset y: " + str(offset_y)
-	print "transform x: " + str(transform_x)
-	print "transform y: " + str(transform_y)
+	# print "transform x: " + str(transform_x)
+	# print "transform y: " + str(transform_y)
 
 
 # display a blank screen
