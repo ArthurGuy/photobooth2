@@ -321,6 +321,8 @@ def start_cam_comparison_test():
 		wait_for_x()
 
 		camera.stop_preview()
+	except Exception, e:
+		camera.stop_preview()
 	finally:
 		camera.close()
 
@@ -350,6 +352,7 @@ def capture_photo_on_slr(wait=True):
 				wait_count += 1
 				time.sleep(1)
 				if wait_count >= 10:
+					slr_image_capture_process.kill()
 					raise Exception("Waited to long capturing photos fom slr camera")
 	else:
 		return slr_image_capture_process
@@ -363,6 +366,7 @@ def download_photos_from_slr(image_folder):
 			wait_count += 1
 			time.sleep(1)
 			if wait_count >= 30:
+				slr_image_capture_process.kill()
 				raise Exception("Waited to long downloading photos fom slr camera")
 	print "Downloaded all images from slr camera"
 
@@ -375,6 +379,7 @@ def delete_photos_from_slr():
 			wait_count += 1
 			time.sleep(1)
 			if wait_count >= 10:
+				slr_image_capture_process.kill()
 				raise Exception("Waited to long deleting photos from slr camera")
 	print "Deleted all images from slr camera"
 
