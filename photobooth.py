@@ -263,7 +263,7 @@ def start_slr_image_test():
 		os.makedirs(image_folder)
 	capture_photo_on_slr(wait=True)
 	download_photos_from_slr(image_folder)
-	# call(["gphoto2", "--capture-image-and-download"], cwd=image_folder)
+	delete_photos_from_slr()
 	for slr_photo in os.listdir(image_folder):
 		show_image(image_folder + "/" + slr_photo)
 
@@ -307,10 +307,14 @@ def start_cam_comparison_test():
 
 	camera = setup_pi_camera()
 	try:
+		camera.hflip = False
 		camera.resolution = (preview_image_w, preview_image_h)
 		camera.start_preview(fullscreen=False, window=(0, 0, monitor_w/2, monitor_h/2))
 
-		call(["gphoto2", "--capture-image-and-download"], cwd=image_folder)
+		capture_photo_on_slr(wait=True)
+		download_photos_from_slr(image_folder)
+		delete_photos_from_slr()
+
 		for slr_photo in os.listdir(image_folder):
 			show_image(image_folder + "/" + slr_photo)
 
