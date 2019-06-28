@@ -99,15 +99,17 @@ pygame.display.toggle_fullscreen()
 bgimage = PIL.Image.open(real_path + "/background.png")
 
 
-camera = picamera.PiCamera(sensor_mode=2)
-camera.vflip = False
-camera.hflip = True # flip for preview, showing users a mirror image
-camera.iso = camera_iso
-
-
 #############
 # Functions #
 #############
+
+
+def setup_pi_camera():
+	camera = picamera.PiCamera(sensor_mode=2)
+	camera.vflip = False
+	camera.hflip = True  # flip for preview, showing users a mirror image
+	camera.iso = camera_iso
+	return camera
 
 
 def detect_slr_camera():
@@ -275,8 +277,8 @@ def start_pi_cam_image_test():
 	show_image(real_path + "/processing.png")
 
 	print "Testing pi camera"
+	camera = setup_pi_camera()
 	try:
-		# camera = picamera.PiCamera(sensor_mode=2)
 		camera.resolution = (preview_image_w, preview_image_h)
 		camera.start_preview(fullscreen=False, window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
 
@@ -325,6 +327,7 @@ def start_photobooth():
 	# camera.vflip = False
 	# camera.hflip = True # flip for preview, showing users a mirror image
 	# camera.iso = camera_iso
+	camera = setup_pi_camera()
 		
 	# Take the photos
 	
