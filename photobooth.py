@@ -274,6 +274,7 @@ def start_pi_cam_image_test():
 	camera.resolution = (preview_image_w, preview_image_h)
 	camera.start_preview(fullscreen=False, window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
 	time.sleep(5)
+	camera.stop_preview()
 
 	show_image(real_path + "/intro.png")
 	GPIO.output(button_led_pin, True)
