@@ -242,14 +242,22 @@ def display_countdown_number(number):
 
 # Capture images from both cameras and display
 def start_slr_image_test():
+	GPIO.output(button_led_pin, False)
+	clear_screen()
+	show_image(real_path + "/processing.png")
+
 	print "Testing slr camera"
 	image_folder = file_path + "testing/"
-	os.mkdir(image_folder)
+	if not os.path.exists(image_folder):
+		os.mkdir(image_folder)
 	call(["gphoto2", "--capture-image-and-download"], cwd=image_folder)
 	for slr_photo in os.listdir(image_folder):
 		print slr_photo
 		show_image(image_folder + "/" + slr_photo)
 		time.sleep(5)
+
+	show_image(real_path + "/intro.png")
+	GPIO.output(button_led_pin, True)
 
 
 # define the photo taking function for when the big button is pressed 
