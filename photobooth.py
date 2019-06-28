@@ -181,7 +181,7 @@ def set_dimensions(img_w, img_h):
 def show_image(image_path):
 
 	# clear the screen
-	screen.fill((0,0,0))
+	screen.fill((0, 0, 0))
 
 	# load the image
 	img = pygame.image.load(image_path)
@@ -191,9 +191,14 @@ def show_image(image_path):
 	set_dimensions(img.get_width(), img.get_height())
 
 	# rescale the image to fit the current display
-	img = pygame.transform.scale(img, (transform_x,transfrom_y))
-	screen.blit(img,(offset_x,offset_y))
+	img = pygame.transform.scale(img, (transform_x, transfrom_y))
+	screen.blit(img, (offset_x, offset_y))
 	pygame.display.flip()
+
+	print "offset x: " + str(offset_x)
+	print "offset y: " + str(offset_y)
+	print "transform x: " + str(transform_x)
+	print "transform y: " + str(transform_y)
 
 
 # display a blank screen
@@ -204,8 +209,8 @@ def clear_screen():
 
 # display a group of images
 def display_pics(base_file_name):
-	for i in range(0, replay_cycles): #show pics a few times
-		for i in range(1, num_pics_to_take+1): #show each pic
+	for i in range(0, replay_cycles):  # show pics a few times
+		for i in range(1, num_pics_to_take+1):  # show each pic
 			show_image(file_path + base_file_name + "-" + str(i) + ".jpg")
 			time.sleep(replay_delay) # pause
 
@@ -305,7 +310,7 @@ def start_cam_comparison_test():
 	camera = setup_pi_camera()
 	try:
 		camera.resolution = (preview_image_w, preview_image_h)
-		camera.start_preview(fullscreen=False, window=(0, 0, preview_image_w/2, preview_image_h/2))
+		camera.start_preview(fullscreen=False, window=(0, 0, monitor_w/2, monitor_h/2))
 
 		call(["gphoto2", "--capture-image-and-download"], cwd=image_folder)
 		for slr_photo in os.listdir(image_folder):
