@@ -188,7 +188,7 @@ def show_image(image_path):
 	set_dimensions(img.get_width(), img.get_height())
 
 	# rescale the image to fit the current display
-	img = pygame.transform.scale(img, (100, 100))
+	img = pygame.transform.scale(img, (transform_x/2, transfrom_y/2))
 	screen.blit(img, (0, 0))
 	# screen.blit(img, (offset_x, offset_y))
 	pygame.display.flip()
