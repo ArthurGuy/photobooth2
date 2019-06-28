@@ -356,6 +356,7 @@ def start_photobooth():
 	show_image(real_path + "/processing.png")
 
 	slr_photo_list = []
+	slr_photo_list_small = []
 	if slr_camera:
 		try:
 			call(["gphoto2", "--get-all-files"], cwd=image_folder)
@@ -364,7 +365,10 @@ def start_photobooth():
 			for slr_photo in os.listdir(image_folder):
 				print slr_photo
 				slr_photo_list.append(image_folder + "/" + slr_photo)
-				show_image(image_folder + "/" + slr_photo)
+				graphicsmagick = "gm convert -size 600x450 " + image_folder + "/" + slr_photo + " -thumbnail 600x450 " + image_folder + "/" + slr_photo + "-" + "-sm.jpg"
+				os.system(graphicsmagick)
+				slr_photo_list_small.append(image_folder + "/" + slr_photo)
+				show_image(image_folder + "/" + slr_photo + "-" + "-sm.jpg")
 				time.sleep(2)
 		except Exception, e:
 			print "Error downloading photos from camera"
@@ -372,10 +376,14 @@ def start_photobooth():
 			traceback.print_exception(e.__class__, e, tb)
 	
 	# Make a small version of the images
-	for x in range(1, num_pics_to_take + 1):  # batch process all the images
-		graphicsmagick = "gm convert -size 600x450 " + file_path + base_file_name + "-" + str(x) + ".jpg -thumbnail 600x450 " + file_path + base_file_name + "-" + str(x) + "-sm.jpg"
+	pi_cam_photo_list = []
+	pi_cam_photo_list_small = []
+	for i in range(1, num_pics_to_take + 1):  # batch process all the images
+		graphicsmagick = "gm convert -size 600x450 " + file_path + base_file_name + "-" + str(i) + ".jpg -thumbnail 600x450 " + file_path + base_file_name + "-" + str(i) + "-sm.jpg"
 		os.system(graphicsmagick)
-	
+		pi_cam_photo_list.append(file_path + base_file_name + "-" + str(i) + ".jpg")
+		pi_cam_photo_list_small.append(file_path + base_file_name + "-" + str(i) + "-sm.jpg")
+
 	# Allow a moment for the small images to create before we use them
 	# time.sleep(1)
 				
@@ -386,10 +394,9 @@ def start_photobooth():
 	if make_photo_grid_image:
 		photo_list = []
 		if slr_camera:
-			photo_list = slr_photo_list
+			photo_list = slr_photo_list_small
 		else:
-			for i in range(1, num_pics_to_take+1):
-				photo_list.append(file_path + base_file_name + "-" + str(i) + "-sm.jpg")
+			photo_list = pi_cam_photo_list_small
 
 		filename = file_path + base_file_name + '-combined.jpg'
 		combine_pics(photo_list, filename)
