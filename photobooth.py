@@ -189,8 +189,7 @@ def show_image(image_path):
 
 	# rescale the image to fit the current display
 	img = pygame.transform.scale(img, (transform_x * 1, transform_y * 1))
-	screen.blit(img, (0, 0))
-	# screen.blit(img, (offset_x, offset_y))
+	screen.blit(img, (offset_x, offset_y))
 	pygame.display.flip()
 
 	# print "offset x: " + str(offset_x)
