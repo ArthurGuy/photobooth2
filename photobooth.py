@@ -256,12 +256,11 @@ def start_slr_image_test():
 		os.makedirs(image_folder)
 	call(["gphoto2", "--capture-image-and-download"], cwd=image_folder)
 	for slr_photo in os.listdir(image_folder):
-		print slr_photo
 		show_image(image_folder + "/" + slr_photo)
-		time.sleep(5)
 
-	show_image(real_path + "/intro.png")
-	GPIO.output(button_led_pin, True)
+	wait_for_x()
+
+	setup_intro_display()
 
 
 def start_pi_cam_image_test():
@@ -273,9 +272,15 @@ def start_pi_cam_image_test():
 	camera = picamera.PiCamera(sensor_mode=2)
 	camera.resolution = (preview_image_w, preview_image_h)
 	camera.start_preview(fullscreen=False, window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
+
 	wait_for_x()
+
 	camera.stop_preview()
 
+	setup_intro_display()
+
+
+def setup_intro_display():
 	show_image(real_path + "/intro.png")
 	GPIO.output(button_led_pin, True)
 
@@ -463,9 +468,8 @@ def start_photobooth():
 		time.sleep(time_to_display_finished_screen)
 
 	print "Done"
-	
-	show_image(real_path + "/intro.png")
-	GPIO.output(button_led_pin, True)
+
+	setup_intro_display()
 
 
 def wait_for_start():
@@ -504,10 +508,9 @@ for x in range(0, 2):  # blink light to show the app is running
 
 print "Photo booth app ready..."
 
-show_image(real_path + "/intro.png")
+setup_intro_display()
 
 while True:
-	GPIO.output(button_led_pin, True)  # turn on the light showing users they can push the button
 	input(pygame.event.get())
 	
 	wait_for_start()
