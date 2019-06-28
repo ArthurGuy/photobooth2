@@ -251,7 +251,7 @@ def start_slr_image_test():
 	show_image(real_path + "/processing.png")
 
 	print "Testing slr camera"
-	image_folder = file_path + "testing/"
+	image_folder = file_path + "testing/" + time.strftime("%Y-%m-%d-%H-%M-%S") + "/"
 	if not os.path.exists(image_folder):
 		os.mkdir(image_folder)
 	call(["gphoto2", "--capture-image-and-download"], cwd=image_folder)
