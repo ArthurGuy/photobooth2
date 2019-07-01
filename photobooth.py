@@ -33,7 +33,6 @@ time_to_display_instructions = 3  # number of seconds to display instruction scr
 time_to_display_image_after_capture = 0
 time_to_display_photo_grid_image = 3  # How long should the final combined image display for
 time_to_display_finished_screen = 3  # The final finished graphic should display for this long
-gif_delay = 20  # How much time between frames in the animated gif
 
 # widescreen monitor 1920 x 1080
 # small booth monitor 1024 x 768
@@ -54,7 +53,9 @@ preview_window_y = (monitor_h - preview_image_h) / 2
 high_res_w = 3280  # width of high res image
 high_res_h = 2464  # height of high res image
 
-make_gif = True
+make_gif = False
+gif_delay = 20  # How much time between frames in the animated gif
+
 make_photo_grid_image = True
 
 camera_iso = 400    # adjust for lighting issues. Normal is 100 or 200. Sort of dark is 400. Dark is 800 max.
@@ -269,11 +270,11 @@ def combine_pics(photo_list, save_filename):
 
 
 def display_header_text(message):
-	font = pygame.font.Font(None, 80)
+	font = pygame.font.Font(None, 90)
 	white = 255, 255, 255
-	grey = 100, 100, 100
+	black = 0, 0, 0
 
-	text = text_outline(font, message, grey, white)
+	text = text_outline(font, message, white, black)
 	# text = font.render(message, 1, (127, 127, 127))
 	textpos = text.get_rect()
 	textpos.centerx = screen.get_rect().centerx
