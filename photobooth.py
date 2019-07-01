@@ -118,6 +118,34 @@ bgimage = PIL.Image.open(real_path + "/background.png")
 #############
 
 
+def text_hollow(font, message, fontcolor):
+	notcolor = [c^0xFF for c in fontcolor]
+	base = font.render(message, 0, fontcolor, notcolor)
+	size = base.get_width() + 2, base.get_height() + 2
+	img = pygame.Surface(size, 16)
+	img.fill(notcolor)
+	base.set_colorkey(0)
+	img.blit(base, (0, 0))
+	img.blit(base, (2, 0))
+	img.blit(base, (0, 2))
+	img.blit(base, (2, 2))
+	base.set_colorkey(0)
+	base.set_palette_at(1, notcolor)
+	img.blit(base, (1, 1))
+	img.set_colorkey(notcolor)
+	return img
+
+
+def text_outline(font, message, fontcolor, outlinecolor):
+	base = font.render(message, 0, fontcolor)
+	outline = text_hollow(font, message, outlinecolor)
+	img = pygame.Surface(outline.get_size(), 16)
+	img.blit(base, (1, 1))
+	img.blit(outline, (0, 0))
+	img.set_colorkey(0)
+	return img
+
+
 def setup_pi_camera():
 	camera = picamera.PiCamera(sensor_mode=2)
 	camera.vflip = False
@@ -240,9 +268,13 @@ def combine_pics(photo_list, save_filename):
 		pygame.quit()
 
 
-def display_header_text(text):
-	font = pygame.font.Font(None, 100)
-	text = font.render(text, 1, (127, 127, 127))
+def display_header_text(message):
+	font = pygame.font.Font(None, 80)
+	white = 255, 255, 255
+	grey = 100, 100, 100
+
+	text = text_outline(font, message, grey, white)
+	# text = font.render(message, 1, (127, 127, 127))
 	textpos = text.get_rect()
 	textpos.centerx = screen.get_rect().centerx
 	textpos.centery = 60
@@ -434,6 +466,9 @@ def start_photobooth():
 			camera.start_preview(fullscreen=False, window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
 			# Semi transparent image so the countdown text shows through
 			camera.preview.alpha = 200
+
+			# Allow time for the preview to start
+			time.sleep(0.5)
 
 			# Display the countdown on screen
 			for countdown in range(countdown_seconds, 0, -1):
