@@ -27,7 +27,7 @@ file_path = '/home/pi/Pictures/'  # path to save images
 
 # Timings
 num_pics_to_take = 2  # number of pics to be taken
-countdown_seconds = 3  # On screen visual countdown
+countdown_seconds = 5  # On screen visual countdown
 # capture_delay = 3  # delay between pics
 time_to_display_instructions = 3  # number of seconds to display instruction screen
 time_to_display_image_after_capture = 0
