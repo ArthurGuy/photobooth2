@@ -12,6 +12,7 @@ import pygame
 from signal import alarm, signal, SIGALRM, SIGKILL
 import PIL.Image
 import gphoto2 as gp
+import random
 from subprocess import call, Popen
 
 ####################
@@ -59,6 +60,19 @@ make_photo_grid_image = True
 camera_iso = 400    # adjust for lighting issues. Normal is 100 or 200. Sort of dark is 400. Dark is 800 max.
 					# available options: 100, 200, 320, 400, 500, 640, 800
 
+success_messages = [
+	"Looking good!",
+	"Wow! That's the money shot!",
+	"FIT!!! ;-)",
+	"What a smile!",
+	"Have you considered being a model?!",
+	"Amazing work!",
+	"You're smashing it!",
+	"Great job!",
+	"B.E.A.UTIFL!",
+	"That just took my breath away!",
+	"The camera loves you!"
+]
 
 #########################
 # Variables that Change #
@@ -452,15 +466,14 @@ def start_photobooth():
 			
 			clear_screen()
 
+			show_image(filename)
+			display_header_text(random.choice(success_messages))
+
 			if slr_camera:
-				show_image(filename)
 				# Wait for image capture to complete
 				if not isinstance(slr_image_capture_process, (int, bool)):
 					while slr_image_capture_process.poll() is None:
 						time.sleep(1)
-			else:
-				show_image(filename)
-				display_header_text("You look great!")
 
 			if time_to_display_image_after_capture:
 				time.sleep(time_to_display_image_after_capture)
