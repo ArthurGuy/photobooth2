@@ -272,7 +272,7 @@ def combine_pics(photo_list, save_filename):
 def display_header_text(message):
 	font = pygame.font.Font(None, 90)
 	white = 255, 255, 255
-	black = 0, 0, 0
+	black = 50, 50, 50
 
 	text = text_outline(font, message, white, black)
 	# text = font.render(message, 1, (127, 127, 127))
@@ -468,7 +468,7 @@ def start_photobooth():
 			# Semi transparent image so the countdown text shows through
 			camera.preview.alpha = 200
 
-			# Allow time for the preview to start
+			# Allow time for the video preview to start before we display the countdown
 			time.sleep(0.5)
 
 			# Display the countdown on screen
@@ -485,6 +485,7 @@ def start_photobooth():
 
 			if slr_camera:
 				slr_image_capture_process = Popen(["gphoto2", "--capture-image"])
+				time.sleep(0.5)  # A few extra moments are needed to ensure the shutter goes while the screen is white
 
 			# reset the camera to full res and flip the image before taking a shot
 			camera.hflip = False
