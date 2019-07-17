@@ -465,6 +465,13 @@ def start_photobooth():
 	image_folder = file_path + base_file_name
 	os.mkdir(image_folder)
 
+	pi_cam_image_folder = image_folder + '/pi-cam/'
+	os.mkdir(pi_cam_image_folder)
+
+	if slr_camera:
+		slr_image_folder = image_folder + '/slr'
+		os.mkdir(slr_image_folder)
+
 	slr_image_capture_process = False
 
 	try:
@@ -501,7 +508,7 @@ def start_photobooth():
 			# reset the camera to full res and flip the image before taking a shot
 			camera.hflip = False
 			camera.resolution = (high_res_w, high_res_h)
-			filename = file_path + base_file_name + '-' + str(i) + '.jpg'
+			filename = pi_cam_image_folder + str(i) + '.jpg'
 			camera.capture(filename)
 			print(filename)
 
@@ -572,9 +579,9 @@ def start_photobooth():
 	for i in range(1, num_pics_to_take + 1):
 		pi_cam_photo_list.append(file_path + base_file_name + "-" + str(i) + ".jpg")
 		if not slr_camera:
-			graphicsmagick = "gm convert -size 600x450 " + file_path + base_file_name + "-" + str(i) + ".jpg -thumbnail 600x450 " + file_path + base_file_name + "-" + str(i) + "-sm.jpg"
+			graphicsmagick = "gm convert -size 600x450 " + pi_cam_image_folder + str(i) + ".jpg -thumbnail 600x450 " + pi_cam_image_folder + str(i) + "-sm.jpg"
 			os.system(graphicsmagick)
-			pi_cam_photo_list_small.append(file_path + base_file_name + "-" + str(i) + "-sm.jpg")
+			pi_cam_photo_list_small.append(pi_cam_image_folder + str(i) + "-sm.jpg")
 
 	# Allow a moment for the small images to create before we use them
 	# time.sleep(1)
