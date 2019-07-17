@@ -468,8 +468,9 @@ def start_photobooth():
 	pi_cam_image_folder = image_folder + '/pi-cam/'
 	os.mkdir(pi_cam_image_folder)
 
+	slr_image_folder = None
 	if slr_camera:
-		slr_image_folder = image_folder + '/slr'
+		slr_image_folder = image_folder + '/slr/'
 		os.mkdir(slr_image_folder)
 
 	slr_image_capture_process = False
@@ -555,17 +556,17 @@ def start_photobooth():
 	slr_photo_list_small = []
 	if slr_camera:
 		try:
-			download_photos_from_slr(image_folder)
+			download_photos_from_slr(slr_image_folder)
 			delete_photos_from_slr()
 
 			# call(["gphoto2", "--get-all-files"], cwd=image_folder)
 			print "Downloaded the following images:"
-			for slr_photo in os.listdir(image_folder):
+			for slr_photo in os.listdir(slr_image_folder):
 				print slr_photo
-				slr_photo_list.append(image_folder + "/" + slr_photo)
-				graphicsmagick = "gm convert -size 600x450 " + image_folder + "/" + slr_photo + " -thumbnail 600x450 " + image_folder + "/" + slr_photo + "-" + "-sm.jpg"
+				slr_photo_list.append(slr_image_folder + slr_photo)
+				graphicsmagick = "gm convert -size 600x450 " + slr_image_folder + slr_photo + " -thumbnail 600x450 " + slr_image_folder + slr_photo + "-" + "-sm.jpg"
 				os.system(graphicsmagick)
-				slr_photo_list_small.append(image_folder + "/" + slr_photo + "-" + "-sm.jpg")
+				slr_photo_list_small.append(slr_image_folder + slr_photo + "-" + "-sm.jpg")
 				# show_image(image_folder + "/" + slr_photo + "-" + "-sm.jpg")
 				# time.sleep(2)
 		except Exception, e:
