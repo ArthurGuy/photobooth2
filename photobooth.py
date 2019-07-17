@@ -22,6 +22,7 @@ from subprocess import call, Popen
 button_led_pin = 4  # LED
 status_led_pin = 21  # red LED
 button_pin = 24  # pin for the start button
+ring_light_pwm_pin = 18  # the ring light
 
 file_path = '/home/pi/Pictures/'  # path to save images
 
@@ -100,13 +101,15 @@ GPIO.output(button_led_pin, False)
 GPIO.setup(status_led_pin, GPIO.OUT)
 GPIO.output(status_led_pin, False)
 GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+ring_light_pwm = GPIO.PWM(ring_light_pwm_pin, 1000)
+ring_light_pwm.start(50)
 
 
 # initialize pygame
 pygame.init()
 pygame.display.set_mode((monitor_w, monitor_h))
 screen = pygame.display.get_surface()
-pygame.display.set_caption('Photo Booth Pics')
+pygame.display.set_caption('Photo Booth')
 pygame.mouse.set_visible(False)  # hide the mouse cursor
 pygame.display.toggle_fullscreen()
 
