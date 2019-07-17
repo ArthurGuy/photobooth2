@@ -63,7 +63,7 @@ make_photo_grid_image = True
 camera_iso = 400    # adjust for lighting issues. Normal is 100 or 200. Sort of dark is 400. Dark is 800 max.
 					# available options: 100, 200, 320, 400, 500, 640, 800
 
-ring_light_standby_brightness = 15
+ring_light_standby_brightness = 10
 ring_light_on_brightness = 80
 
 success_messages = [
@@ -242,11 +242,6 @@ def show_image(image_path):
 	img = pygame.transform.scale(img, (transform_x * 1, transform_y * 1))
 	screen.blit(img, (offset_x, offset_y))
 	pygame.display.flip()
-
-	# print "offset x: " + str(offset_x)
-	# print "offset y: " + str(offset_y)
-	# print "transform x: " + str(transform_x)
-	# print "transform y: " + str(transform_y)
 
 
 # display a blank screen
@@ -567,14 +562,13 @@ def start_photobooth():
 				graphicsmagick = "gm convert -size 600x450 " + slr_image_folder + slr_photo + " -thumbnail 600x450 " + slr_image_folder + slr_photo + "-" + "-sm.jpg"
 				os.system(graphicsmagick)
 				slr_photo_list_small.append(slr_image_folder + slr_photo + "-" + "-sm.jpg")
-				# show_image(image_folder + "/" + slr_photo + "-" + "-sm.jpg")
-				# time.sleep(2)
+
 		except Exception, e:
 			print "Error downloading photos from camera"
 			tb = sys.exc_info()[2]
 			traceback.print_exception(e.__class__, e, tb)
 	
-	# Make a small version of the images and move filenames into arrays
+	# Make a small version of the pi cam images and move file names into arrays
 	pi_cam_photo_list = []
 	pi_cam_photo_list_small = []
 	for i in range(1, num_pics_to_take + 1):
@@ -583,9 +577,6 @@ def start_photobooth():
 			graphicsmagick = "gm convert -size 600x450 " + pi_cam_image_folder + str(i) + ".jpg -thumbnail 600x450 " + pi_cam_image_folder + str(i) + "-sm.jpg"
 			os.system(graphicsmagick)
 			pi_cam_photo_list_small.append(pi_cam_image_folder + str(i) + "-sm.jpg")
-
-	# Allow a moment for the small images to create before we use them
-	# time.sleep(1)
 				
 	if make_gif:
 		graphicsmagick = "gm convert -delay " + str(gif_delay) + " " + file_path + base_file_name + "-*-sm.jpg " + file_path + base_file_name + ".gif"
@@ -601,27 +592,21 @@ def start_photobooth():
 		combine_pics(photo_list, filename)
 		show_image(filename)
 		time.sleep(time_to_display_photo_grid_image)
-	
-	# Delete the small images
-	# try:
-	# 	for x in range(1, num_pics_to_take + 1):
-	# 		os.remove(file_path + base_file_name + "-" + str(x) + "-sm.jpg")
-	# except Exception, e:
-	# 	print "Error deleting thumbnails"
-	# 	tb = sys.exc_info()[2]
-	# 	traceback.print_exception(e.__class__, e, tb)
 
 	# Delete the small images
-	if slr_camera:
-		for photo_path in slr_photo_list_small:
-			os.remove(photo_path)
-	else:
-		for photo_path in pi_cam_photo_list_small:
-			os.remove(photo_path)
+	try:
+		if slr_camera:
+			for photo_path in slr_photo_list_small:
+				os.remove(photo_path)
+		else:
+			for photo_path in pi_cam_photo_list_small:
+				os.remove(photo_path)
+	except Exception, e:
+		print "Error deleting thumbnails"
+		tb = sys.exc_info()[2]
+		traceback.print_exception(e.__class__, e, tb)
 		
 	# Finished
-	
-	# input(pygame.event.get())
 
 	if time_to_display_finished_screen > 0:
 		show_image(real_path + "/finished.png")
@@ -661,6 +646,10 @@ def wait_for_start():
 print "Photo booth app starting..."
 
 detect_slr_camera()
+
+# Ensure the camera is in a clean and empty state
+if slr_camera:
+	delete_photos_from_slr()
 
 for x in range(0, 2):  # blink light to show the app is running
 	GPIO.output(button_led_pin, True)
