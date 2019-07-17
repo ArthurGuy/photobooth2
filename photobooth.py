@@ -25,6 +25,7 @@ button_pin = 24  # pin for the start button
 ring_light_pwm_pin = 18  # the ring light
 
 file_path = '/home/pi/Pictures/'  # path to save images
+photo_grid_file_path = file_path + 'photo_grid/'
 
 # Timings
 num_pics_to_take = 2  # number of pics to be taken
@@ -32,7 +33,7 @@ countdown_seconds = 5  # On screen visual countdown
 # capture_delay = 3  # delay between pics
 time_to_display_instructions = 3  # number of seconds to display instruction screen
 time_to_display_image_after_capture = 0
-time_to_display_photo_grid_image = 3  # How long should the final combined image display for
+time_to_display_photo_grid_image = 4  # How long should the final combined image display for
 time_to_display_finished_screen = 3  # The final finished graphic should display for this long
 
 # widescreen monitor 1920 x 1080
@@ -61,6 +62,9 @@ make_photo_grid_image = True
 
 camera_iso = 400    # adjust for lighting issues. Normal is 100 or 200. Sort of dark is 400. Dark is 800 max.
 					# available options: 100, 200, 320, 400, 500, 640, 800
+
+ring_light_standby_brightness = 15
+ring_light_on_brightness = 80
 
 success_messages = [
 	"Looking good!",
@@ -103,7 +107,7 @@ GPIO.output(status_led_pin, False)
 GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(ring_light_pwm_pin, GPIO.OUT)
 ring_light_pwm = GPIO.PWM(ring_light_pwm_pin, 1000)
-ring_light_pwm.start(25)
+ring_light_pwm.start(ring_light_standby_brightness)
 
 
 # initialize pygame
@@ -455,7 +459,7 @@ def start_photobooth():
 	print "Taking pics"
 
 	# Increase the brightness of the might
-	ring_light_pwm.start(75)
+	ring_light_pwm.start(ring_light_on_brightness)
 	
 	base_file_name = time.strftime("%Y-%m-%d-%H-%M-%S")  # get the current time for the start of the filename
 	image_folder = file_path + base_file_name
@@ -532,7 +536,7 @@ def start_photobooth():
 		camera.close()
 
 	# Turn down the light brightness
-	ring_light_pwm.start(25)
+	ring_light_pwm.start(ring_light_standby_brightness)
 
 	# Produce the combined images
 	
@@ -562,14 +566,15 @@ def start_photobooth():
 			tb = sys.exc_info()[2]
 			traceback.print_exception(e.__class__, e, tb)
 	
-	# Make a small version of the images
+	# Make a small version of the images and move filenames into arrays
 	pi_cam_photo_list = []
 	pi_cam_photo_list_small = []
-	for i in range(1, num_pics_to_take + 1):  # batch process all the images
-		graphicsmagick = "gm convert -size 600x450 " + file_path + base_file_name + "-" + str(i) + ".jpg -thumbnail 600x450 " + file_path + base_file_name + "-" + str(i) + "-sm.jpg"
-		os.system(graphicsmagick)
+	for i in range(1, num_pics_to_take + 1):
 		pi_cam_photo_list.append(file_path + base_file_name + "-" + str(i) + ".jpg")
-		pi_cam_photo_list_small.append(file_path + base_file_name + "-" + str(i) + "-sm.jpg")
+		if not slr_camera:
+			graphicsmagick = "gm convert -size 600x450 " + file_path + base_file_name + "-" + str(i) + ".jpg -thumbnail 600x450 " + file_path + base_file_name + "-" + str(i) + "-sm.jpg"
+			os.system(graphicsmagick)
+			pi_cam_photo_list_small.append(file_path + base_file_name + "-" + str(i) + "-sm.jpg")
 
 	# Allow a moment for the small images to create before we use them
 	# time.sleep(1)
@@ -579,25 +584,32 @@ def start_photobooth():
 		os.system(graphicsmagick)
 
 	if make_photo_grid_image:
-		photo_list = []
 		if slr_camera:
 			photo_list = slr_photo_list_small
 		else:
 			photo_list = pi_cam_photo_list_small
 
-		filename = file_path + base_file_name + '-combined.jpg'
+		filename = photo_grid_file_path + base_file_name + '.jpg'
 		combine_pics(photo_list, filename)
 		show_image(filename)
 		time.sleep(time_to_display_photo_grid_image)
 	
 	# Delete the small images
-	try:
-		for x in range(1, num_pics_to_take + 1):
-			os.remove(file_path + base_file_name + "-" + str(x) + "-sm.jpg")
-	except Exception, e:
-		print "Error deleting thumbnails"
-		tb = sys.exc_info()[2]
-		traceback.print_exception(e.__class__, e, tb)
+	# try:
+	# 	for x in range(1, num_pics_to_take + 1):
+	# 		os.remove(file_path + base_file_name + "-" + str(x) + "-sm.jpg")
+	# except Exception, e:
+	# 	print "Error deleting thumbnails"
+	# 	tb = sys.exc_info()[2]
+	# 	traceback.print_exception(e.__class__, e, tb)
+
+	# Delete the small images
+	if slr_camera:
+		for photo_path in slr_photo_list_small:
+			os.remove(photo_path)
+	else:
+		for photo_path in pi_cam_photo_list_small:
+			os.remove(photo_path)
 		
 	# Finished
 	
