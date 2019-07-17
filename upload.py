@@ -11,7 +11,7 @@ from dropbox.exceptions import ApiError, AuthError
 # Access token
 TOKEN = 'TKwbt9fdwwsAAAAAAABVANP1ggLNtwAw-_joRFTntvrOZGmgSVYR2sFZwtp0R7rH'
 
-LOCALFILE = '/home/pi/Pictures/*-combined.jpg'
+LOCALFILE = '/home/pi/Pictures/photo_grid/*'
 BACKUPPATH = '/photobooth' # Keep the forward slash before destination filename
 
 
@@ -25,6 +25,7 @@ def backup():
         try:
             f = open(photo, 'r')
             dbx.files_upload(f.read(), BACKUPPATH + "/" + file_name, mode=WriteMode('overwrite'))
+            os.remove(photo)
         except ApiError as err:
             if err.error.is_path() and err.error.get_path().error.is_insufficient_space():
                 sys.exit("ERROR: Cannot back up; insufficient space.")
