@@ -101,6 +101,7 @@ GPIO.output(button_led_pin, False)
 GPIO.setup(status_led_pin, GPIO.OUT)
 GPIO.output(status_led_pin, False)
 GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(ring_light_pwm_pin, GPIO.OUT)
 ring_light_pwm = GPIO.PWM(ring_light_pwm_pin, 1000)
 ring_light_pwm.start(50)
 
