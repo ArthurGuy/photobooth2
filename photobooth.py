@@ -103,7 +103,7 @@ GPIO.output(status_led_pin, False)
 GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(ring_light_pwm_pin, GPIO.OUT)
 ring_light_pwm = GPIO.PWM(ring_light_pwm_pin, 1000)
-ring_light_pwm.start(50)
+ring_light_pwm.start(25)
 
 
 # initialize pygame
@@ -453,6 +453,9 @@ def start_photobooth():
 	# Take the photos
 	
 	print "Taking pics"
+
+	# Increase the brightness of the might
+	ring_light_pwm.start(75)
 	
 	base_file_name = time.strftime("%Y-%m-%d-%H-%M-%S")  # get the current time for the start of the filename
 	image_folder = file_path + base_file_name
@@ -527,6 +530,9 @@ def start_photobooth():
 				# clear_screen()
 	finally:
 		camera.close()
+
+	# Turn down the light brightness
+	ring_light_pwm.start(25)
 
 	# Produce the combined images
 	
