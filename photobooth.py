@@ -22,7 +22,8 @@ from subprocess import call, Popen
 button_led_pin = 4  # LED
 status_led_pin = 21  # red LED
 button_pin = 24  # pin for the start button
-ring_light_pwm_pin = 18  # the ring light
+ring_light_low_pin = 17  # the ring light
+ring_light_high_pin = 18  # the ring light
 
 file_path = '/home/pi/Pictures/'  # path to save images
 photo_grid_file_path = file_path + 'photo_grid/'
@@ -63,9 +64,6 @@ make_photo_grid_image = True
 camera_iso = 400    # adjust for lighting issues. Normal is 100 or 200. Sort of dark is 400. Dark is 800 max.
 					# available options: 100, 200, 320, 400, 500, 640, 800
 
-ring_light_standby_brightness = 10
-ring_light_on_brightness = 80
-
 success_messages = [
 	"Looking good!",
 	"Wow! That's the money shot!",
@@ -105,9 +103,10 @@ GPIO.output(button_led_pin, False)
 GPIO.setup(status_led_pin, GPIO.OUT)
 GPIO.output(status_led_pin, False)
 GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(ring_light_pwm_pin, GPIO.OUT)
-ring_light_pwm = GPIO.PWM(ring_light_pwm_pin, 1000)
-ring_light_pwm.start(ring_light_standby_brightness)
+GPIO.setup(ring_light_low_pin, GPIO.OUT)
+GPIO.setup(ring_light_high_pin, GPIO.OUT)
+GPIO.output(ring_light_low_pin, False)
+GPIO.output(ring_light_high_pin, False)
 
 
 # initialize pygame
@@ -183,7 +182,6 @@ def detect_slr_camera():
 
 # clean up running programs as needed when main program exits
 def cleanup():
-	print('Ended abruptly')
 	pygame.quit()
 	GPIO.cleanup()
 
@@ -454,8 +452,9 @@ def start_photobooth():
 	print "Taking pics"
 
 	# Increase the brightness of the might
-	ring_light_pwm.start(ring_light_on_brightness)
-	
+	GPIO.output(ring_light_low_pin, False)
+	GPIO.output(ring_light_high_pin, True)
+
 	base_file_name = time.strftime("%Y-%m-%d-%H-%M-%S")  # get the current time for the start of the filename
 	image_folder = file_path + base_file_name
 	os.mkdir(image_folder)
@@ -539,7 +538,8 @@ def start_photobooth():
 		camera.close()
 
 	# Turn down the light brightness
-	ring_light_pwm.start(ring_light_standby_brightness)
+	GPIO.output(ring_light_low_pin, True)
+	GPIO.output(ring_light_high_pin, False)
 
 	# Produce the combined images
 	
