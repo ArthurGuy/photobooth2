@@ -15,7 +15,6 @@ import gphoto2 as gp
 import random
 from subprocess import call, Popen
 from shutil import copyfile
-import cups
 
 ####################
 # Variables Config #
@@ -125,10 +124,6 @@ pygame.display.toggle_fullscreen()
 
 # Load the background template
 bgimage = PIL.Image.open(real_path + "/background.png")
-
-
-# Create a connection to the printer service
-conn = cups.Connection()
 
 
 #############
@@ -606,12 +601,6 @@ def start_photobooth():
 
 		show_image(filename)
 		time.sleep(time_to_display_photo_grid_image)
-
-		if print_images:
-			# Check the queue for any pending-held jobs, this would indicate a problem
-			# If there are issues don't try and print the file
-
-			job_id = conn.printFile(printer_name, filename, base_file_name, {})
 
 	# Delete the small images
 	try:
