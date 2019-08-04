@@ -18,7 +18,7 @@ job_id = conn.printFile(printer_name, test_image, "Photo Booth", {})
 # Wait until the job finishes
 print 'Printing'
 while conn.getJobs().get(job_id, None):
-    print conn.getJobAttributes(job_id, requested_attributes=['job-printer-state-message'])
+    print conn.getJobAttributes(job_id, requested_attributes=['job-printer-state-message', 'job-media-progress', 'job-state'])
     print '.'
     sleep(5)
 
