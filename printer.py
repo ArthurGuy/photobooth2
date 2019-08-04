@@ -14,7 +14,14 @@ conn.enablePrinter(printer_name)
 
 # print conn.getPrinterAttributes(name=printer_name, requested_attributes=['printer-state-message', 'printer-is-accepting-jobs'])
 
-print conn.getJobs()
+for job_id in conn.getJobs():
+    status = conn.getJobAttributes(job_id, requested_attributes=['job-printer-state-message', 'job-state'])
+    if status['job-state'] == 3:
+        print job_id, 'Waiting to print'
+    elif status['job-state'] == 4:
+        print job_id, status['job-printer-state-message']
+    elif status['job-state'] == 5:
+        print job_id, 'Printing'
 
 test_image = '/home/pi/photobooth/test.jpg'
 
@@ -29,7 +36,7 @@ while conn.getJobs().get(job_id, None):
         # print 'Problem'
         print status['job-printer-state-message']
     elif status['job-state'] == 3:
-        print 'Waiting in queue, printer on hold'
+        print 'Waiting in queue'
     else:
         print status['job-state']
     # print '.'
