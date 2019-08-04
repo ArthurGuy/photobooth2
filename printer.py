@@ -10,7 +10,7 @@ for printer in printers:
 
 printer_name = 'cp400'
 
-conn.getPrinterAttributes(name=printer_name)
+print conn.getPrinterAttributes(name=printer_name)
 
 test_image = '/home/pi/photobooth/test.jpg'
 
