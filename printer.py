@@ -18,8 +18,20 @@ job_id = conn.printFile(printer_name, test_image, "Photo Booth", {})
 # Wait until the job finishes
 print 'Printing'
 while conn.getJobs().get(job_id, None):
-    print conn.getJobAttributes(job_id, requested_attributes=['job-printer-state-message', 'job-media-progress', 'job-state'])
-    print '.'
+    status = conn.getJobAttributes(job_id, requested_attributes=['job-printer-state-message', 'job-state'])
+    if status['job-state'] == 5:
+        print 'Processing'
+    elif status['job-state'] == 4:
+        print 'Problem'
+        print status['job-printer-state-message']
+    else:
+        print status['job-state']
+    # print '.'
     sleep(5)
 
 print 'Finished'
+
+# job state
+# 3 = pending
+# 4 = pending-held
+# 5 = processing
