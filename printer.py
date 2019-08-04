@@ -12,7 +12,7 @@ printer_name = 'cp400'
 
 # print conn.getPrinterAttributes(name=printer_name, requested_attributes=['printer-state-message', 'printer-is-accepting-jobs'])
 
-print conn.getJobs(requested_attributes=['job-printer-state-message', 'job-state'])
+print conn.getJobs(which_jobs='not-completed', requested_attributes=['job-printer-state-message', 'job-state'])
 
 test_image = '/home/pi/photobooth/test.jpg'
 
