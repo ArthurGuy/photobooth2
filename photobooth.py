@@ -68,7 +68,7 @@ camera_iso = 400    # adjust for lighting issues. Normal is 100 or 200. Sort of 
 					# available options: 100, 200, 320, 400, 500, 640, 800
 
 printer_name = 'cp400'
-print_images = True
+print_images = False
 
 success_messages = [
 	"Looking good!",
