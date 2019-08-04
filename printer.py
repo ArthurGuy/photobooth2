@@ -16,6 +16,7 @@ print_id = conn.printFile(printer_name, test_image, "Photo Booth", {})
 # Wait until the job finishes
 print 'Printing'
 while conn.getJobs().get(print_id, None):
+    print conn.getJobs().get(print_id, None)
     print '.'
     sleep(5)
 
