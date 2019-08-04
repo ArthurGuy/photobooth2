@@ -6,7 +6,7 @@ from time import sleep
 conn = cups.Connection()
 printers = conn.getPrinters()
 for printer in printers:
-    print printer, printers[printer]
+    print printer, printers[printer]["device-uri"]
 
 printer_name = 'cp400'
 
@@ -14,7 +14,7 @@ conn.enablePrinter(printer_name)
 
 # print conn.getPrinterAttributes(name=printer_name, requested_attributes=['printer-state-message', 'printer-is-accepting-jobs'])
 
-print conn.getJobs(which_jobs='all', requested_attributes=['job-printer-state-message', 'job-state'])
+print conn.getJobs()
 
 test_image = '/home/pi/photobooth/test.jpg'
 
