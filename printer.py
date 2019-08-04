@@ -8,7 +8,7 @@ printers = conn.getPrinters()
 for printer in printers:
     print printer, printers[printer]["device-uri"]
 
-printer_name = 'cp220'
+printer_name = 'cp400'
 
 test_image = '/home/pi/photobooth/test.jpg'
 
