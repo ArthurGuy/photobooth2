@@ -14,6 +14,8 @@ import PIL.Image
 import gphoto2 as gp
 import random
 from subprocess import call, Popen
+from shutil import copyfile
+import cups
 
 ####################
 # Variables Config #
@@ -64,6 +66,9 @@ make_photo_grid_image = True
 
 camera_iso = 400    # adjust for lighting issues. Normal is 100 or 200. Sort of dark is 400. Dark is 800 max.
 					# available options: 100, 200, 320, 400, 500, 640, 800
+
+printer_name = 'cp400'
+print_images = True
 
 success_messages = [
 	"Looking good!",
@@ -120,6 +125,10 @@ pygame.display.toggle_fullscreen()
 
 # Load the background template
 bgimage = PIL.Image.open(real_path + "/background.png")
+
+
+# Create a connection to the printer service
+conn = cups.Connection()
 
 
 #############
@@ -597,6 +606,12 @@ def start_photobooth():
 
 		show_image(filename)
 		time.sleep(time_to_display_photo_grid_image)
+
+		if print_images:
+			# Check the queue for any pending-held jobs, this would indicate a problem
+			# If there are issues don't try and print the file
+
+			job_id = conn.printFile(printer_name, filename, base_file_name, {})
 
 	# Delete the small images
 	try:
