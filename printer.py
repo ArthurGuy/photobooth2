@@ -6,7 +6,7 @@ from time import sleep
 conn = cups.Connection()
 printers = conn.getPrinters()
 for printer in printers:
-    print printer, printers[printer]["device-uri"]
+    print printer, printers[printer]
 
 printer_name = 'cp400'
 
