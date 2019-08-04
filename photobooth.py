@@ -27,6 +27,7 @@ ring_light_high_pin = 18  # the ring light
 
 file_path = '/home/pi/Pictures/'  # path to save images
 photo_grid_file_path = file_path + 'photo_grid/'
+photo_grid_upload_file_path = file_path + 'photo_grid_upload/'
 
 # Timings
 num_pics_to_take = 2  # number of pics to be taken
@@ -590,6 +591,10 @@ def start_photobooth():
 
 		filename = photo_grid_file_path + base_file_name + '.jpg'
 		combine_pics(photo_list, filename)
+
+		# Copy the image into a folder for automatic uploading
+		copyfile(filename, photo_grid_upload_file_path + base_file_name + '.jpg')
+
 		show_image(filename)
 		time.sleep(time_to_display_photo_grid_image)
 

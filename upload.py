@@ -11,7 +11,7 @@ from dropbox.exceptions import ApiError, AuthError
 # Access token
 TOKEN = 'TKwbt9fdwwsAAAAAAABVANP1ggLNtwAw-_joRFTntvrOZGmgSVYR2sFZwtp0R7rH'
 
-LOCALFILE = '/home/pi/Pictures/photo_grid/*'
+LOCALFILE = '/home/pi/Pictures/photo_grid_upload/*'
 BACKUPPATH = '/photobooth' # Keep the forward slash before destination filename
 
 
