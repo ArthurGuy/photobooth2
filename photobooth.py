@@ -123,7 +123,7 @@ pygame.mouse.set_visible(False)  # hide the mouse cursor
 pygame.display.toggle_fullscreen()
 
 # Load the background template
-bgimage = PIL.Image.open(real_path + "/background.jpg")
+bgimage = PIL.Image.open(real_path + "/background.png")
 
 
 #############
