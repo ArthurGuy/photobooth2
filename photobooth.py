@@ -260,13 +260,13 @@ def combine_pics(photo_list, save_filename):
 			i = i + 1
 			image = PIL.Image.open(photo_path)
 			if i == 1:
-				bgimage.paste(image, (25, 25))
+				bgimage.paste(image, (25, 51))
 			if i == 2:
-				bgimage.paste(image, (650, 25))
+				bgimage.paste(image, (650, 51))
 			if i == 3:
-				bgimage.paste(image, (25, 500))
+				bgimage.paste(image, (25, 526))
 			if i == 4:
-				bgimage.paste(image, (650, 500))
+				bgimage.paste(image, (650, 526))
 
 		bgimage.save(save_filename)
 	except Exception, e:
@@ -276,7 +276,7 @@ def combine_pics(photo_list, save_filename):
 
 
 def display_header_text(message):
-	font = pygame.font.Font(None, 90)
+	font = pygame.font.Font(None, 80)
 	white = 255, 255, 255
 	black = 50, 50, 50
 
