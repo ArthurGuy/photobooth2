@@ -31,10 +31,10 @@ photo_grid_file_path = file_path + 'photo_grid/'
 photo_grid_upload_file_path = file_path + 'photo_grid_upload/'
 
 # Timings
-num_pics_to_take = 2  # number of pics to be taken
+num_pics_to_take = 3  # number of pics to be taken
 countdown_seconds = 5  # On screen visual countdown
 # capture_delay = 3  # delay between pics
-time_to_display_instructions = 3  # number of seconds to display instruction screen
+time_to_display_instructions = 2  # number of seconds to display instruction screen
 time_to_display_image_after_capture = 0
 time_to_display_photo_grid_image = 4  # How long should the final combined image display for
 time_to_display_finished_screen = 3  # The final finished graphic should display for this long
