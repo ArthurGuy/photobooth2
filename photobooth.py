@@ -564,7 +564,7 @@ def start_photobooth():
 			for slr_photo in os.listdir(slr_image_folder):
 				print slr_photo
 				slr_photo_list.append(slr_image_folder + slr_photo)
-				graphicsmagick = "gm convert -size 600x450 " + slr_image_folder + slr_photo + " -thumbnail 600x450 " + slr_image_folder + slr_photo + "-" + "-sm.jpg"
+				graphicsmagick = "gm convert -size 600x398 " + slr_image_folder + slr_photo + " -thumbnail 600x398 " + slr_image_folder + slr_photo + "-" + "-sm.jpg"
 				os.system(graphicsmagick)
 				slr_photo_list_small.append(slr_image_folder + slr_photo + "-" + "-sm.jpg")
 
