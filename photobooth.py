@@ -123,7 +123,7 @@ pygame.mouse.set_visible(False)  # hide the mouse cursor
 pygame.display.toggle_fullscreen()
 
 # Load the background template
-bgimage = PIL.Image.open(real_path + "/background.png")
+bgimage = PIL.Image.open(real_path + "/background.jpg")
 
 
 #############
@@ -260,13 +260,13 @@ def combine_pics(photo_list, save_filename):
 			i = i + 1
 			image = PIL.Image.open(photo_path)
 			if i == 1:
-				bgimage.paste(image, (25, 51))
+				bgimage.paste(image, (50, 102))
 			if i == 2:
-				bgimage.paste(image, (650, 51))
+				bgimage.paste(image, (1300, 102))
 			if i == 3:
-				bgimage.paste(image, (25, 526))
+				bgimage.paste(image, (50, 1052))
 			if i == 4:
-				bgimage.paste(image, (650, 526))
+				bgimage.paste(image, (1300, 1052))
 
 		bgimage.save(save_filename)
 	except Exception, e:
@@ -559,12 +559,13 @@ def start_photobooth():
 			download_photos_from_slr(slr_image_folder)
 			delete_photos_from_slr()
 
+			# Resize the images
 			# call(["gphoto2", "--get-all-files"], cwd=image_folder)
 			print "Downloaded the following images:"
 			for slr_photo in os.listdir(slr_image_folder):
 				print slr_photo
 				slr_photo_list.append(slr_image_folder + slr_photo)
-				graphicsmagick = "gm convert -size 600x398 " + slr_image_folder + slr_photo + " -thumbnail 600x398 " + slr_image_folder + slr_photo + "-" + "-sm.jpg"
+				graphicsmagick = "gm convert -size 1200x796 " + slr_image_folder + slr_photo + " -thumbnail 1200x796 " + slr_image_folder + slr_photo + "-" + "-sm.jpg"
 				os.system(graphicsmagick)
 				slr_photo_list_small.append(slr_image_folder + slr_photo + "-" + "-sm.jpg")
 
@@ -579,7 +580,7 @@ def start_photobooth():
 	for i in range(1, num_pics_to_take + 1):
 		pi_cam_photo_list.append(file_path + base_file_name + "-" + str(i) + ".jpg")
 		if not slr_camera:
-			graphicsmagick = "gm convert -size 600x450 " + pi_cam_image_folder + str(i) + ".jpg -thumbnail 600x450 " + pi_cam_image_folder + str(i) + "-sm.jpg"
+			graphicsmagick = "gm convert -size 1200x900 " + pi_cam_image_folder + str(i) + ".jpg -thumbnail 12000x900 " + pi_cam_image_folder + str(i) + "-sm.jpg"
 			os.system(graphicsmagick)
 			pi_cam_photo_list_small.append(pi_cam_image_folder + str(i) + "-sm.jpg")
 				
