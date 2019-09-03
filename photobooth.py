@@ -317,7 +317,7 @@ def start_slr_image_test():
 	for slr_photo in os.listdir(image_folder):
 		show_image(image_folder + "/" + slr_photo)
 
-	wait_for_x()
+	wait_for_esc()
 
 	setup_intro_display()
 
@@ -333,7 +333,7 @@ def start_pi_cam_image_test():
 		camera.resolution = (preview_image_w, preview_image_h)
 		camera.start_preview(fullscreen=False, window=(preview_window_x, preview_window_y, preview_image_w, preview_image_h))
 
-		wait_for_x()
+		wait_for_esc()
 
 		camera.stop_preview()
 	finally:
@@ -368,7 +368,7 @@ def start_cam_comparison_test():
 		for slr_photo in os.listdir(image_folder):
 			show_image(image_folder + "/" + slr_photo)
 
-		wait_for_x()
+		wait_for_esc()
 
 		camera.stop_preview()
 	except Exception, e:
@@ -384,11 +384,11 @@ def setup_intro_display():
 	GPIO.output(button_led_pin, True)
 
 
-def wait_for_x():
+def wait_for_esc():
 	while True:
 		for event in pygame.event.get():
 			if event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_x:
+				if event.key == pygame.K_ESCAPE:
 					return
 		time.sleep(0.2)
 
